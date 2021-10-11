@@ -78,7 +78,7 @@ class: inverse-green, center, middle
 .UA-red[Statistische modellen = Golems... = robots... ]
 .center2[
 ```{r, out.height = "35%", out.width="35%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Golem.jpg"))
+knitr::include_graphics("Fig/Golem.jpg")
 ```
 ]
 
@@ -90,7 +90,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Golem.jpg"))
 ]
 .center2[
 ```{r, out.height = "50%", out.width="50%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Robot1.jpg"))
+knitr::include_graphics("Fig/Robot1.jpg")
 ```
 ]
 
@@ -102,7 +102,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Robot1.jpg"))
 
 .center2[
 ```{r, out.height = "90%", out.width="90%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Robot2.jpg"))
+knitr::include_graphics("Fig/Robot2.jpg")
 ```
 ]
 
@@ -460,7 +460,7 @@ Visualiseer onderstaande onderzoeksvragen (samen met je buur)
 ## Analysemodellen - Oefening 1 - oplossingen 
 
 ```{r, out.height = "50%", out.width="50%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Analysemod1.png"))
+knitr::include_graphics("Fig/Analysemod1.png")
 ```
 
 ---
@@ -487,7 +487,7 @@ De training wordt gemodereerd door 20 verschillende mentoren en elke mentor bege
 ## Analysemodellen - Oefening 2 - oplossingen
 
 ```{r, out.height = "50%", out.width="50%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Analysemod2.png"))
+knitr::include_graphics("Fig/Analysemod2.png")
 ```
 
 ---
@@ -499,7 +499,7 @@ Wanneer pas je regressieanalyse toe?
 Wat zijn de assumpties achter regressieanalyse?
 
 ```{r, out.height = "60%", out.width="60%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"assumpties.jpg"))
+knitr::include_graphics("Fig/assumpties.jpg")
 ```
 
 ---

@@ -91,7 +91,7 @@ Voorkennis $\rightarrow$ nMinuten $\rightarrow$ Eindtoets
 ## Van eenvoudig
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel1.jpg"))
+knitr::include_graphics("Fig/Padmodel1.jpg")
 ```
 
 ---
@@ -99,7 +99,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Padmodel1.jpg"))
 ## Naar minder eenvoudig
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel2.jpg"))
+knitr::include_graphics("Fig/Padmodel2.jpg")
 ```
 
 ---
@@ -107,7 +107,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Padmodel2.jpg"))
 ## Naar complex
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel3.png"))
+knitr::include_graphics("Fig/Padmodel3.png")
 ```
 
 ---
@@ -115,7 +115,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Padmodel3.png"))
 ## Tot zeer complex
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel4.jpg"))
+knitr::include_graphics("Fig/Padmodel4.jpg")
 ```
 
 ---
@@ -123,7 +123,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Padmodel4.jpg"))
 ## De onderdelen uit een padmodel
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel5.jpg"))
+knitr::include_graphics("Fig/Padmodel5.jpg")
 ```
 
 ---
@@ -203,7 +203,7 @@ summary(Fit_Model1, fit.measures = TRUE, standardized = TRUE)
 
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M1.jpg"))
+knitr::include_graphics("Fig/Padmodel_PIRLS_M1.jpg")
 ```
 
 ---
@@ -251,7 +251,7 @@ summary(Fit_PIRLS_M1, standardized = T, rsq = T)
 ## Eenvoudig voorbeeld - resultaten
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M1_resultaten.jpg"))
+knitr::include_graphics("Fig/Padmodel_PIRLS_M1_resultaten.jpg")
 ```
 
 ---
@@ -259,7 +259,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M1_resultaten.jpg"))
 ## Samenhang tussen de onafhankelijke variabelen?
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M1_alternatief.jpg"))
+knitr::include_graphics("Fig/Padmodel_PIRLS_M1_alternatief.jpg")
 ```
 
 ---
@@ -281,7 +281,7 @@ Het argument **.SW-greenD[`fixed.x = F`]** werd toegevoegd!
 ---
 
 ```{r, out.height = "45%", out.width="45%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Output_pad_A1.png"))
+knitr::include_graphics("Fig/Output_pad_A1.png")
 ```
 
 ---
@@ -303,7 +303,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Output_pad_A1.png"))
 ## Een echt padmodel - visueel
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M2.jpg"))
+knitr::include_graphics("Fig/Padmodel_PIRLS_M2.jpg")
 ```
 
 ---
@@ -326,7 +326,7 @@ summary(Fit_PIRLS_M2, standardized = T, rsq = T)
 ## Een echt padmodel - resultaten
 
 ```{r, out.height = "45%", out.width="45%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Output_pad_A2.png"))
+knitr::include_graphics("Fig/Output_pad_A2.png")
 ```
 
 ---
@@ -334,7 +334,7 @@ knitr::include_graphics(here("C1", "Fig" ,"Output_pad_A2.png"))
 ## Een echt padmodel - resultaten visueel
 
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M2_resultaten.jpg"))
+knitr::include_graphics("Fig/Padmodel_PIRLS_M2_resultaten.jpg")
 ```
 
 ---
@@ -432,7 +432,7 @@ $\Sigma$ de verwachte variantie- covariantiematrix gegeven onderstaand model
 
 <br>
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
-knitr::include_graphics(here("C1", "Fig" ,"Padmodel_PIRLS_M2.jpg"))
+knitr::include_graphics("Fig/Padmodel_PIRLS_M2.jpg")
 ```
 
 ---
