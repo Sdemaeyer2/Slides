@@ -1,5 +1,5 @@
 ---
-title: 'GKN - C1 - Part1'
+title: 'GKN - C1 - Deel 1'
 output:
   xaringan::moon_reader:
     css: [default, default-fonts, extra.css]
