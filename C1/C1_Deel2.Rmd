@@ -428,7 +428,7 @@ Vastgestelde waarden worden vergeleken met verwachte waarden volgens het theoret
 
 ## Een echt padmodel - visueel
 
-$\Sigma$ de verwachte variantie- covariantiematrix gegeven onderstaand model
+$\Sigma$ de verwachte variantie- covariantiematrix gegeven onderstaand model 
 
 <br>
 ```{r, out.height = "75%", out.width="75%", eval = T, echo = F}
