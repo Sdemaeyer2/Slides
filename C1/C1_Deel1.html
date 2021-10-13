@@ -433,15 +433,9 @@ Visualiseer onderstaande onderzoeksvragen (samen met je buur)
 
 ---
 
-## Analysemodellen - Oefening 1 - oplossingen 
-
-&lt;img src="Fig/Analysemod1.png" width="50%" height="50%" /&gt;
-
----
-
 ## 🏃🏽‍ Analysemodellen - Oefening 2 🏃🏽‍
 
-De training wordt gemodereerd door 20 verschillende mentoren en elke mentor begeleid 15 trainees
+De training wordt gemodereerd door 20 verschillende mentoren en elke mentor begeleidt 15 trainees
 
 &lt;br&gt;
 
@@ -454,13 +448,7 @@ De training wordt gemodereerd door 20 verschillende mentoren en elke mentor bege
 - OV6: Is het effect van 'kijktijd' op de eindscore die trainees behalen (z-score) afhankelijk van de mentor die een trainee krijgt toegewezen?
 
 
-- OV7: In hoeverre is de eindscore die trainees behalen (z-score) voorspellend voor het al dan niet behalen van het certificaat?}
-
----
-
-## Analysemodellen - Oefening 2 - oplossingen
-
-&lt;img src="Fig/Analysemod2.png" width="50%" height="50%" /&gt;
+- OV7: In hoeverre is de eindscore die trainees behalen (z-score) voorspellend voor het al dan niet behalen van het certificaat?
 
 ---
 
@@ -476,7 +464,7 @@ Wat zijn de assumpties achter regressieanalyse?
 
 ## Regressieanalyse: visueel
 
-&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-10-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-8-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -502,7 +490,7 @@ met:
 `$$Eindscore_{i}= 45 + 2 * nMinuten + \epsilon_{ij}$$`
 
 
-&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-9-1.png" width="432" style="display: block; margin: auto;" /&gt;
 ]
 .pull-right[
 - Verwachte eindscore als je 0 minuten kennisclips bekeek = ?
@@ -545,7 +533,7 @@ Vlaanderen$Leesvaardigheid &lt;- as.numeric(Vlaanderen$ASRREA01)
 .pull-left[*Dan een grafiek maken*]
 
 .pull-right[
-&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-13-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-11-1.png" width="432" style="display: block; margin: auto;" /&gt;
 ]
 ---
 
@@ -837,6 +825,52 @@ summary(Model3)
 ]
 
 ---
+## Regressieanalyse met een categorische onafh. variabele (5)
+
+.pull-left[
+*Is hetzelfde model als met een dummy-variabele*
+]
+
+.pull-right[
+.footnotesize[
+
+```r
+Vlaanderen$Jongen &lt;- (Vlaanderen$Geslacht == 2)*1
+Model3b &lt;- lm(LeesvaardigheidZ ~ BetrokkenheidZ + LeesplezierZ + 
+               DevicesZ + Jongen, data = Vlaanderen)
+summary(Model3b)
+```
+
+```
+## 
+## Call:
+## lm(formula = LeesvaardigheidZ ~ BetrokkenheidZ + LeesplezierZ + 
+##     DevicesZ + Jongen, data = Vlaanderen)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.0877 -0.6239  0.0405  0.6652  3.5331 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     0.12744    0.01988   6.412 1.59e-10 ***
+## BetrokkenheidZ  0.02431    0.01444   1.684  0.09230 .  
+## LeesplezierZ    0.21264    0.01428  14.886  &lt; 2e-16 ***
+## DevicesZ        0.03796    0.01428   2.658  0.00788 ** 
+## Jongen         -0.15560    0.02859  -5.442 5.55e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9636 on 4575 degrees of freedom
+##   (618 observations deleted due to missingness)
+## Multiple R-squared:  0.05572,	Adjusted R-squared:  0.0549 
+## F-statistic: 67.49 on 4 and 4575 DF,  p-value: &lt; 2.2e-16
+```
+]
+]
+
+
+---
 
 ## Een laatste voorbeeld...
 
@@ -860,7 +894,7 @@ Hoe te modelleren in R? Wat impliceert dit?
 
 ```r
 Model4 &lt;- lm(LeesvaardigheidZ ~ LeesplezierZ + 
-               GeslachtF + LeesplezierZ*GeslachtF, 
+               Jongen + LeesplezierZ*Jongen, 
              data = Vlaanderen)
 summary(Model4)
 ```
@@ -868,19 +902,19 @@ summary(Model4)
 ```
 
 Call:
-lm(formula = LeesvaardigheidZ ~ LeesplezierZ + GeslachtF + LeesplezierZ * 
-    GeslachtF, data = Vlaanderen)
+lm(formula = LeesvaardigheidZ ~ LeesplezierZ + Jongen + LeesplezierZ * 
+    Jongen, data = Vlaanderen)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
 -4.0933 -0.6273  0.0416  0.6693  3.4991 
 
 Coefficients:
-                        Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)              0.12357    0.01978   6.248 4.53e-10 ***
-LeesplezierZ             0.19689    0.01975   9.971  &lt; 2e-16 ***
-GeslachtF2              -0.16006    0.02839  -5.639 1.81e-08 ***
-LeesplezierZ:GeslachtF2  0.03565    0.02841   1.255     0.21    
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)          0.12357    0.01978   6.248 4.53e-10 ***
+LeesplezierZ         0.19689    0.01975   9.971  &lt; 2e-16 ***
+Jongen              -0.16006    0.02839  -5.639 1.81e-08 ***
+LeesplezierZ:Jongen  0.03565    0.02841   1.255     0.21    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -900,7 +934,7 @@ F-statistic: 87.48 on 3 and 4631 DF,  p-value: &lt; 2.2e-16
 
 Het interactie-effect (ook al is het niet significant) even visueel
 
-&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-23-1.png" width="432" style="display: block; margin: auto;" /&gt;
+&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-22-1.png" width="432" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -950,7 +984,7 @@ F-statistic: 54.28 on 5 and 4574 DF,  p-value: &lt; 2.2e-16
 Het interactie-effect (ook al is het niet significant) even visueel
 
 
-&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-25-1.png" width="432" /&gt;
+&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-24-1.png" width="432" /&gt;
 
 ---
 
@@ -959,7 +993,7 @@ Het interactie-effect (ook al is het niet significant) even visueel
 Hetzelfde interactie-effect even visueel (maar dan "andersom") 
 
 
-&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-26-1.png" width="432" /&gt;
+&lt;img src="C1_Deel1_files/figure-html/unnamed-chunk-25-1.png" width="432" /&gt;
 
 
 ---

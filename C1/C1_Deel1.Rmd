@@ -457,17 +457,9 @@ Visualiseer onderstaande onderzoeksvragen (samen met je buur)
 
 ---
 
-## Analysemodellen - Oefening 1 - oplossingen 
-
-```{r, out.height = "50%", out.width="50%", eval = T, echo = F}
-knitr::include_graphics("Fig/Analysemod1.png")
-```
-
----
-
 ## 🏃🏽‍ Analysemodellen - Oefening 2 🏃🏽‍
 
-De training wordt gemodereerd door 20 verschillende mentoren en elke mentor begeleid 15 trainees
+De training wordt gemodereerd door 20 verschillende mentoren en elke mentor begeleidt 15 trainees
 
 <br>
 
@@ -480,15 +472,7 @@ De training wordt gemodereerd door 20 verschillende mentoren en elke mentor bege
 - OV6: Is het effect van 'kijktijd' op de eindscore die trainees behalen (z-score) afhankelijk van de mentor die een trainee krijgt toegewezen?
 
 
-- OV7: In hoeverre is de eindscore die trainees behalen (z-score) voorspellend voor het al dan niet behalen van het certificaat?}
-
----
-
-## Analysemodellen - Oefening 2 - oplossingen
-
-```{r, out.height = "50%", out.width="50%", eval = T, echo = F}
-knitr::include_graphics("Fig/Analysemod2.png")
-```
+- OV7: In hoeverre is de eindscore die trainees behalen (z-score) voorspellend voor het al dan niet behalen van het certificaat?
 
 ---
 
@@ -766,6 +750,25 @@ summary(Model3)
 ]
 
 ---
+## Regressieanalyse met een categorische onafh. variabele (5)
+
+.pull-left[
+*Is hetzelfde model als met een dummy-variabele*
+]
+
+.pull-right[
+.footnotesize[
+```{r, , echo = T , eval = T}
+Vlaanderen$Jongen <- (Vlaanderen$Geslacht == 2)*1
+Model3b <- lm(LeesvaardigheidZ ~ BetrokkenheidZ + LeesplezierZ + 
+               DevicesZ + Jongen, data = Vlaanderen)
+summary(Model3b)
+```
+]
+]
+
+
+---
 
 ## Een laatste voorbeeld...
 
@@ -788,7 +791,7 @@ Hoe te modelleren in R? Wat impliceert dit?
 .footnotesize[
 ```{r, , echo = T , comment="", size = "tiny", eval = T}
 Model4 <- lm(LeesvaardigheidZ ~ LeesplezierZ + 
-               GeslachtF + LeesplezierZ*GeslachtF, 
+               Jongen + LeesplezierZ*Jongen, 
              data = Vlaanderen)
 summary(Model4)
 ```
@@ -805,12 +808,12 @@ Het interactie-effect (ook al is het niet significant) even visueel
 
 ```{r, echo = F, fig.width=6,fig.height=6, fig.align="center"}
 LeesplezierZ <- rnorm(1000,0,1)
-Geslacht     <- c(rep(0,500),rep(1,500))
-Predicted_leesscore <- 0.1236 + 0.19689 * LeesplezierZ - 0.16 * Geslacht + 0.04 * LeesplezierZ * Geslacht
-D <- data.frame(LeesplezierZ, Geslacht, Predicted_leesscore)
-D$Geslacht <- as.factor(D$Geslacht)
-P <- ggplot(D, aes(LeesplezierZ,Predicted_leesscore, colour=Geslacht)) + geom_line() 
-P + annotate(geom = "text",x=-1, y=0.15, label="Intercept Girl = 0.1236") + annotate(geom = "point" , x=0, y=0.1236) + annotate(geom = "text",x=1.5, y=-0.06, label="Intercept Boy = 0.1236 - 0.16 = -0.0364") + annotate(geom = "point" , x=0, y=-0.0364)
+Jongen     <- c(rep(0,500),rep(1,500))
+Predicted_leesscore <- 0.1236 + 0.19689 * LeesplezierZ - 0.16 * Jongen + 0.04 * LeesplezierZ * Jongen
+D <- data.frame(LeesplezierZ, Jongen, Predicted_leesscore)
+D$Jongen <- as.factor(D$Jongen)
+P <- ggplot(D, aes(LeesplezierZ,Predicted_leesscore, colour=Jongen)) + geom_line() 
+P + annotate(geom = "text",x=-1, y=0.15, label="Intercept Meisje = 0.1236") + annotate(geom = "point" , x=0, y=0.1236) + annotate(geom = "text",x=1.5, y=-0.06, label="Intercept Jongen = 0.1236 - 0.16 = -0.0364") + annotate(geom = "point" , x=0, y=-0.0364)
 ```
 
 ---
