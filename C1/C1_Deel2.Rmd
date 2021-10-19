@@ -525,7 +525,7 @@ Alternatieve, vaak gerapporteerde, fit index = **Root Mean Square of Approximati
 
 ## Fit voor het echte padmodel
 
-```{r, echo = T, size = "tiny", comment=""}
+```{r, echo = T, comment=""}
 fitMeasures(Fit_PIRLS_M2, 
             c("npar","chisq","df","pvalue","cfi","rmsea"))
 ```

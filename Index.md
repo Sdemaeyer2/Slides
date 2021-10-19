@@ -14,7 +14,7 @@ Zelf kan je eveneens een pdf-file maken indien je de slides open hebt staan in j
 
 Contactmoment 1 [DEEL 1](C1/C1_Deel1.html) & [DEEL 2](C1/C1_deel2.html)
 
-Contactmoment 2
+Contactmoment 2 [Slides](C2/C2.html)
 
 Contactmoment 3
 

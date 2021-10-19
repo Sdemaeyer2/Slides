@@ -1,0 +1,59 @@
+\usepackage{graphicx}
+\usepackage{rotating}
+
+%\setbeamertemplate{caption}[numbered]
+
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage[normalem]{ulem}
+%\mode<presentation>
+\usepackage{wasysym}
+\usepackage{amsmath}
+
+\usetheme{Luebeck}
+\useoutertheme{miniframes} % Alternatively: miniframes, infolines, split
+\useinnertheme{circles}
+
+\setbeamertemplate{navigation symbols}{}
+\institute{Opleidings- en onderwijswetenschappen}
+\titlegraphic{\includegraphics[width=0.3\paperwidth]{\string edubronlogo.png}}
+\setbeamertemplate{title page}[empty]
+
+\setbeamerfont{subtitle}{size=\small}
+
+\setbeamercovered{transparent}
+
+\definecolor{edubronblauw}{RGB}{4,68,102}
+\definecolor{edubrongroen}{RGB}{170,170,23}
+\definecolor{uarood}{RGB}{147,0,49}
+
+\setbeamercolor{frametitle}{fg=edubronblauw,bg=white}
+\setbeamercolor{title}{fg=edubronblauw,bg=white}
+\setbeamercolor{subtitle}{fg=edubrongroen,bg=edubronblauw}
+\setbeamercolor{local structure}{fg=edubronblauw}
+\setbeamercolor{section in toc}{fg=edubronblauw,bg=white}
+% \setbeamercolor{subsection in toc}{fg=edubrongroen,bg=white}
+
+\setbeamercolor{item projected}{fg=edubronblauw,bg=white}
+\setbeamertemplate{itemize item}{\color{edubronblauw}$\bullet$}
+\setbeamertemplate{itemize subitem}{\color{uarood}\scriptsize{$\bullet$}}
+
+\setbeamercolor{palette primary}{bg=edubronblauw,fg=white}
+\setbeamercolor{palette secondary}{bg=edubronblauw,fg=white}
+\setbeamercolor{palette tertiary}{bg=edubronblauw,fg=white}
+\setbeamercolor{palette quaternary}{bg=edubronblauw,fg=white}
+\setbeamercolor{subsection in head/foot}{bg=edubrongroen,fg=white}
+
+\let\Tiny=\tiny
+
+\def\begincols{\begin{columns}}
+\def\begincol{\begin{column}}
+\def\endcol{\end{column}}
+\def\endcols{\end{columns}}
+
+\AtBeginPart{}
+\AtBeginSection{}
+\AtBeginSubsection{}
+\AtBeginSubsubsection{}
+\setlength{\emergencystretch}{0em}
+\setlength{\parskip}{0pt}
