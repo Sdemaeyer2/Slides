@@ -16,7 +16,7 @@ Contactmoment 1 [DEEL 1](C1/C1_Deel1.html) & [DEEL 2](C1/C1_deel2.html)
 
 Contactmoment 2 [Slides](C2/C2.html)
 
-Contactmoment 3
+Contactmoment 3 [Slides](C3/C3.html)
 
 Contactmoment 4
 

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GKN 2021-2022: C3</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+&lt;style&gt;
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.right-column{
+  padding-top: 0;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 75%;
+                                  }
+
+
+&lt;/style&gt;
+
+
+&lt;div class="my-logo-left"&gt; &lt;img src="img/UA-eng-hor-1-RGB.jpg" width="90%"/&gt; &lt;/div&gt;
+
+
+# GKN - Contactmoment 3
+.font160[
+.SW-greenD[Multilevel Analyse (Deel 1)] 
+]
+Sven De Maeyer &amp; Bea Mertens
+
+.font80[
+.UA-red[
+18/11/2021
+]
+]
+
+---
+class: inverse-green, center, middle
+
+# Opwarmertjes
+
+*Multilevel is Everywhere...*
+
+---
+
+## Geografisch opwarmertje...
+
+&lt;img src="Fig/CurieuzeNeuzen.jpg" width="75%" height="75%" /&gt;
+
+---
+
+## Virologisch opwarmertje...
+
+&lt;img src="Fig/corona.png" width="75%" height="75%" /&gt;
+
+---
+
+## Sportief opwarmertje...
+
+&lt;img src="Fig/nba.jpg" width="75%" height="75%" /&gt;
+
+---
+
+## OOW opwarmertje 1...
+
+*.UA-red[Welke factoren beïnvloeden de ervaren nood aan opleiding bij kenniswerkers?]*
+
+&lt;br&gt;
+
+Data:
+
+- 289 kenniswerkers
+
+- 33 bedrijven
+
+---
+
+## OOW opwarmertje 2...
+
+*.UA-red[Hoe sterk is het effect van sociale achtergrond op scores die leerlingen halen voor begrijpend lezen in het PIRLS onderzoek?]*
+
+&lt;br&gt; 
+
+Data:
+
+- +/- 319 000 4de jaars
+
+- +/-  12 000 scholen
+
+- 50 landen
+
+---
+
+## OOW opwarmertje 3...
+
+*.UA-red[Hoe evolueert de perceptie van teamleden aangaande team reflexiviteit doorheen de tijd?]*
+
+&lt;br&gt; 
+
+Data:
+
+- Periode van 10 weken
+
+- twee-dagelijks zeer korte vragenlijst
+
+- 11 teams
+
+- 6 leden per team
+
+---
+class: inverse-green, center, middle
+
+# Hiërarchie
+
+*What's in the word ... ?*
+
+---
+
+## Multi...levels...
+
+Data in voorbeelden duiden op .UA-red[genestheid]    
+
+Anders gezegd, er zit .UA-red[hiërarchie] in de data
+
+&lt;br&gt;
+
+Voorbeelden:
+
+- mensen wonend (~ genest in) in straten van wijken van ... 
+
+- kenniswerkers tewerkgesteld (~ genest in) in bedrijven
+
+---
+
+## Levels... (2 levels)
+
+&lt;img src="Fig/Structuur_2levels.jpg" width="75%" height="75%" /&gt;
+
+
+---
+## Levels... (3 levels)
+
+&lt;img src="Fig/Structuur_3levels.jpg" width="75%" height="75%" /&gt;
+
+---
+
+## Soorten hiërarchiën
+
+**2 soorten hiërarchieën**:  
+
+
+.SW-greenD[Natuurlijke]
+
+- Lln in klassen (in scholen, in landen)
+- Werknemers in bedrijven
+- Meetpunten in straten, die deel uitmaken van buurten, steden, provincies, … (zie Curieuzeneuzen)   
+
+
+Door .SW-greenD[onderzoeksdesign]
+
+- Longitudinaal 
+- Bloksteekproef
+- Experimenteel 
+
+---
+class: inverse-green, center, middle
+
+# Hiërarchie...  So what?
+
+*Het doet er wel degelijk toe!!*
+
+---
+class: inverse-blue
+
+## Probleem 1. 
+##Hiërarchie in de onderzoeksvraag
+
+**Praktisch:**
+
+Hoe ga je onderzoeksvragen analyseren indien de vragen kenmerken van het ene niveau linken aan kenmerken van het andere niveau?
+
+&lt;br&gt;
+
+**Voorbeeld:**         
+
+&gt; Heeft klasgrootte een impact op leerlingenprestaties? (een variabele op klasniveau en een variabele op leerlingniveau)
+
+---
+
+## Oplossing? 
+
+&lt;img src="Fig/Oplossing.png" width="75%" height="75%" /&gt;
+
+---
+
+## Oude oplossing 1: AGGREGEREN
+
+&lt;img src="Fig/Aggregeren.jpg" width="70%" height="70%" /&gt;
+
+---
+## Ecological fallacy  (~Aggregation bias!)
+
+.UA-red[= ‘the invalid transfer of aggregate results to individuals’]
+
+&lt;br&gt;
+
+.SW-greenD[Robinson studie (1950) (data van 1930)]
+
+Correlatie tussen ‘Illiteracy’ and ‘Nativity’ (foreign-born vs. rest):
+
+- at state level = -0.53
+- at individual level = 0.12
+
+---
+
+## Oude oplossing 2: DESAGGREGEREN
+
+&lt;img src="Fig/Desaggregeren.jpg" width="70%" height="70%" /&gt;
+
+---
+
+## Atomistic fallacy
+
+.UA-red[= ‘the invalid transfer of individual results to aggregates’]
+
+&lt;br&gt;
+
+- *r* IQ en Prestaties op leerlingniveau = 0.53     
+
+- Wil niet PER DEFINITIE zeggen dat scholen met een hoger gemiddeld IQ ook gemiddeld hoger gaan scoren op gemiddelde prestatie
+
+---
+class: inverse-blue
+
+## Probleem 2. 
+## Hiërarchie heeft statistische gevolgen
+
+**Statistisch
+: ** 
+Hiërarchie negeren heeft invloed op schattingen 
+
+&lt;br&gt;
+
+**Voorbeeld:**       
+
+&gt; In PIRLS onderzoek, verband tussen SES en score op begrijpend lezen onderzoeken (beide variabelen op leerlingniveau)}
+
+&lt;br&gt;
+Nog steeds is hiërarchie een probleem! Schattingen zijn niet ok...
+---
+## Intuïtief
+
+&gt; “Everything is related to everything else, but near things are more related than distant things.” (Tobler, 1970)
+
+&lt;br&gt; 
+
+- 2 Studenten uit zelfde school lijken meer op elkaar dan 2 willekeurige leerlingen uit verschillende scholen
+
+- Medewerkers van een bepaald bedrijf ...
+
+- Metingen van zelfde persoon op verschillende tijdstippen  ...
+
+&lt;br&gt; 
+
+`\(\Leftrightarrow\)` .UA-red[Assumptie bij regressieanalyse: waarnemingen zijn onafhankelijk van elkaar]
+
+---
+## Een voorbeeld met data (1)
+
+.pull-left[
+&lt;img src="Fig/Datavb.jpg" width="70%" height="70%" /&gt;
+]
+
+.pull-right[
+*Hoe groot is de variantie in wiskundescores?*
+]
+
+---
+
+## Een voorbeeld met data (2)
+
+.pull-left[
+&lt;img src="Fig/Datavb.jpg" width="70%" height="70%" /&gt;
+]
+.pull-right[
+*Hoe groot is de variantie in wiskundescores?*
+
+&lt;br&gt;
+
+.SW-greenD[Simpele benadering] (zonder rekening te houden met hiërarchie)
+
+.footnotesize[
+
+```r
+var(c(1,2,3,3,4,5,2,3,4))
+```
+
+```
+[1] 1.5
+```
+]
+]
+
+---
+## Een voorbeeld met data (3)
+
+.pull-left[
+&lt;img src="Fig/Datavb.jpg" width="70%" height="70%" /&gt;
+]
+
+.pull-right[
+*Hoe groot is de variantie in wiskundescores?*
+
+&lt;br&gt;
+
+.SW-greenD[Rekening houdend met hiërarchie]
+
+.footnotesize[
+
+```r
+# Variantie tussen scholen
+var(c(2,4,3))
+```
+
+```
+[1] 1
+```
+
+```r
+# Variantie binnen scholen
+(var(c(1,2,3)) + var(c(3,4,5)) + var(c(2,3,4))) / 3
+```
+
+```
+[1] 1
+```
+
+```r
+# Totale variantie:
+
+var(c(1,2,3)) + (var(c(1,2,3)) + var(c(3,4,5)) + var(c(2,3,4))) / 3
+```
+
+```
+[1] 2
+```
+]
+]
+
+---
+
+## Een voorbeeld met data (4)
+
+.pull-left[
+&lt;img src="Fig/Datavb.jpg" width="70%" height="70%" /&gt;
+]
+
+.pull-right[*Hoe groot is de variantie in wiskundescores?*
+
+- Hiërarchie genegeerd: .UA-red[1.5]
+&lt;br&gt;
+&lt;br&gt;
+- Hiërarchie in rekening genomen: .UA-red[2]
+]
+---
+## Variantie wordt onderschat &amp; p-waarde te laag geschat!
+
+&lt;img src="C3_files/figure-html/unnamed-chunk-17-1.png" width="1296" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse-green, center, middle
+
+# Multilevel model
+
+*Bring on the power!*
+
+---
+
+## Regressieanalyse
+
+.pull-left[
+`\(Eindscore_{i} = \beta_0 + \beta_1 * SES_{i} + \epsilon_{i}\)`
+]
+
+.pull-right[
+&lt;img src="C3_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+---
+
+## Regressieanalyse
+
+.pull-left[
+`\(Eindscore_{i} = \beta_0 + \beta_1 * SES_{i} + \epsilon_{i}\)`
+]
+
+.pull-right[
+&lt;img src="C3_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## 3 regressiemodellen
+
+.pull-left[
+School 1:
+`\(Eindscore_{i} = \beta_0 + \beta_1 * SES_{i} + (\epsilon_{i})\)`
+
+School 2:
+`\(Eindscore_{i} = \beta_0 + \beta_1 * SES_{i} + (\epsilon_{i})\)`
+
+School 3:
+`\(Eindscore_{i} = \beta_0 + \beta_1 * SES_{i} + (\epsilon_{i})\)`
+]
+.pull-right[
+&lt;img src="C3_files/figure-html/unnamed-chunk-20-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Multilevel model
+
+.pull-left[
+`\(Eindscore_{ij} = \beta_0 + \beta_1 * SES_{ij} + (\mu_{0j} + \epsilon_{ij})\)`
+]
+
+.pull-right[
+&lt;img src="C3_files/figure-html/unnamed-chunk-21-1.png" width="504" height="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Multilevel model - Random Intercepts
+
+&lt;img src="Fig/Geannoteerdefiguur.png" width="70%" height="70%" /&gt;
+
+---
+
+## Multilevel model - Random Intercepts
+
+`\(Eindscore_{ij} = \beta_0 + \beta_1 * SES_{ij} + (\mu_{0j} + \epsilon_{ij})\)`
+
+&lt;br&gt;
+
+**3 scholen**, dus **3 verschillende 	`\(\mu_{0j}\)`'s**:
+
+
+- `\(\mu_{01} \approx -19.39\)`
+- `\(\mu_{02} \approx 0\)`
+- `\(\mu_{03} \approx 19.39\)`
+
+
+**Variantie tussen scholen** (berekend):
+
+
+`\(\sigma_{\mu_{0j}}^2 = \frac{(\mu_{01}^2 + \mu_{02}^2 + \mu_{03}^2)}{3} \approx 250.56\)`
+
+---
+## Multilevel model - Random Intercepts
+
+`\(Eindscore_{ij} = \beta_0 + \beta_1 * SES_{ij} + (\mu_{0j} + \epsilon_{ij})\)`
+
+
+**123 leerlingen**, dus **123 verschillende	`\(\epsilon_{0ij}\)`'s**:
+
+
+
+**Variantie tussen leerlingen** (berekend) = 
+
+
+`\(\sigma_{\epsilon_{0ij}}^2 = \frac{(\epsilon_{011}^2 + \epsilon_{012}^2 + ...)}{123} \approx 327.39\)`
+
+---
+
+## ICC
+
+*.UA-red[Hoe groot is de impact van scholen?]*
+
+&lt;br&gt;
+
+Uitgedrukt in '% variantie'
+
+&lt;br&gt;
+
+`\(ICC = \frac{\sigma_{\mu_{0j}}^2}{\sigma_{\mu_{0j}}^2 + \sigma_{\epsilon_{0ij}}^2}=\frac{var_{scholen}}{var_{scholen} + var_{lln}} = \frac{250.56}{250.56 + 327.39} = 0.43\)`
+
+.footnote[ICC = Intraclass Correlation]
+---
+
+## Multilevel model - Random Intercepts
+
+Wat wordt geschat (ipv berekend zoals hierboven):
+
+- .SW-greenD[Fixed effects] = het model overheen alle eenheden
+
+- .SW-greenD[Random effects] = verschillende varianties
+
+&lt;br&gt;
+
+In ons voorbeeld
+
+- Fixed effects: Intercept + Slope (SES)
+
+- Random effects: (1) Variantie tussen scholen en (2) variantie tussen leerlingen in scholen
+
+---
+class: inverse-green, center, middle
+
+# Multilevel analyse in R (lme4)
+
+*Let the fun begin...*
+
+---
+
+## Pakketten in R
+
+Er bestaan verschillende paketten in R om multilevel analyses uit te voeren
+
+&lt;br&gt;
+
+Wij hanteren .UA-red[`lme4`] en aanvullend het pakket .UA-red[`lmerTest` ]
+
+
+```r
+install.packages('lme4', dependencies = T)
+install.packages('lmerTest', dependencies = T)
+library(lme4)
+library(lmerTest)
+```
+
+---
+
+## Nulmodel definiëren
+
+.SW-greenD[Model zonder enige voorspellers.]
+
+&lt;br&gt;
+
+**Doel**
+    
+*Schatten van de 'onconditionele' varianties op de verschillende onderscheiden niveaus (levels)*
+
+&lt;br&gt;
+
+Enkel een overall gemiddelde en varianties worden geschat...
+
+.footnote[
+*We zullen straks werken met een PIRLS voorbeeld over leesvaardigheid. *
+
+```r
+Vlaanderen_1_2_3$Leesvaardigheid &lt;- Vlaanderen_1_2_3$ASRREA01
+```
+]
+
+---
+
+## Nulmodel definiëren (voorbeeld in Pirls)
+
+.pull-left[
+
+```r
+PIRLS_Model0 &lt;- lmer(
+  Leesvaardigheid ~ 1 + (1|IDSCHOOL), 
+  data = Vlaanderen_1_2_3,
+  REML = F)
+
+summary(PIRLS_Model0)
+
+# ICC 
+587.4/(587.4+3095.2)
+```
+]
+
+.pull-right[
+.footnotesize[
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: Leesvaardigheid ~ 1 + (1 | IDSCHOOL)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 56823.7  56843.3 -28408.8  56817.7     5195 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.7482 -0.6609  0.0138  0.6875  3.6439 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ IDSCHOOL (Intercept)  587.4   24.24   
+ Residual             3095.2   55.63   
+Number of obs: 5198, groups:  IDSCHOOL, 148
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(&gt;|t|)    
+(Intercept)  524.025      2.175 144.014   240.9   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```
+[1] 0.1595069
+```
+]
+]
+---
+## Nulmodel met 3 levels
+
+.pull-left[
+Ook variantie tussen klassen?
+
+
+```r
+PIRLS_Model1 &lt;- lmer(
+  Leesvaardigheid ~ 1 + (1|IDSCHOOL) + (1|IDCLASS), 
+  data = Vlaanderen_1_2_3,
+  REML = F)
+
+summary(PIRLS_Model1)
+
+# ICC klasniveau
+166.1/(166.1 + 409.4 + 3016.6)
+# ICC schoolniveau
+409.4/(166.1 + 409.4 + 3016.6)
+```
+]
+
+.pull-right[
+.footnotesize[
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: Leesvaardigheid ~ 1 + (1 | IDSCHOOL) + (1 | IDCLASS)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 56785.5  56811.7 -28388.7  56777.5     5194 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4014 -0.6589  0.0139  0.7004  3.7464 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ IDCLASS  (Intercept)  166.1   12.89   
+ IDSCHOOL (Intercept)  490.4   22.14   
+ Residual             3016.6   54.92   
+Number of obs: 5198, groups:  IDCLASS, 277; IDSCHOOL, 148
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(&gt;|t|)    
+(Intercept)  523.846      2.175 143.213   240.8   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```
+[1] 0.04624036
+```
+
+```
+[1] 0.1139723
+```
+]
+]
+
+---
+
+## Welk nulmodel best?
+
+Opnieuw hanteren we het commando .UA-red[`anova( )`]     
+
+&lt;br&gt; 
+
+Let op! Modellen moeten **op dezelfde data geschat** worden  
+&lt;br&gt;
+`\(\rightarrow\)` `na.omit()` indien nodig
+
+
+```r
+anova(PIRLS_Model0 , PIRLS_Model1)
+```
+
+```
+Data: Vlaanderen_1_2_3
+Models:
+PIRLS_Model0: Leesvaardigheid ~ 1 + (1 | IDSCHOOL)
+PIRLS_Model1: Leesvaardigheid ~ 1 + (1 | IDSCHOOL) + (1 | IDCLASS)
+             npar   AIC   BIC logLik deviance  Chisq Df Pr(&gt;Chisq)    
+PIRLS_Model0    3 56824 56843 -28409    56818                         
+PIRLS_Model1    4 56785 56812 -28389    56777 40.179  1  2.317e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+## Significantietoetsen voor variantieschattingen
+
+
+```r
+rand(PIRLS_Model1)
+```
+
+```
+ANOVA-like table for random-effects: Single term deletions
+
+Model:
+Leesvaardigheid ~ (1 | IDSCHOOL) + (1 | IDCLASS)
+               npar logLik   AIC    LRT Df Pr(&gt;Chisq)    
+&lt;none&gt;            4 -28389 56785                         
+(1 | IDSCHOOL)    3 -28419 56843 59.741  1  1.082e-14 ***
+(1 | IDCLASS)     3 -28409 56824 40.179  1  2.317e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+&lt;br&gt;
+
+logLik is significant lager voor modellen waarin ofwel variantie tussen scholen of variantie tussen klassen verwijderd worden
+
+&lt;br&gt;
+
+`\(\rightarrow\)` Beide varianties behouden in het model
+
+---
+
+## Voorspellers toevoegen
+
+
+```r
+Vlaanderen_1_2_3$Gender &lt;- recode(
+  Vlaanderen_1_2_3$ASBG01, 
+  '1 = "Girls"; 2 = "Boys"'
+  ) 
+
+Vlaanderen_1_2_3$Ouders_GraagLezenZ &lt;- scale(Vlaanderen_1_2_3$ASBHPLR) 
+```
+
+
+
+```r
+PIRLS_ModelRI &lt;- lmer(
+  Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + 
+    (1|IDSCHOOL) + (1|IDCLASS), 
+  data = Vlaanderen_1_2_3, 
+  REML = F)
+```
+
+---
+## Voorspellers toevoegen
+.footnotesize[
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 | IDSCHOOL) +  
+    (1 | IDCLASS)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 50414.6  50453.3 -25201.3  50402.6     4629 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5382 -0.6457  0.0261  0.6831  3.6867 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ IDCLASS  (Intercept)  151.2   12.30   
+ IDSCHOOL (Intercept)  420.8   20.51   
+ Residual             2871.3   53.58   
+Number of obs: 4635, groups:  IDCLASS, 275; IDSCHOOL, 147
+
+Fixed effects:
+                    Estimate Std. Error        df t value Pr(&gt;|t|)    
+(Intercept)         520.8727     2.2258  186.6044 234.011  &lt; 2e-16 ***
+GenderGirls          10.1501     1.6083 4492.7054   6.311 3.04e-10 ***
+Ouders_GraagLezenZ   11.4031     0.8162 4546.6389  13.972  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) GndrGr
+GenderGirls -0.372       
+Odrs_GrgLzZ  0.009 -0.010
+```
+]
+
+---
+## Conditionele varianties vs. onconditionele varianties
+&lt;br&gt;
+
+Wat valt op als je naar de varianties kijkt?
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+|                      | Nulmodel (oncond.) | ModelRI (cond.) |
+|----------------------|:-----------------------:|:---------------------:|
+| Variantie klassen    |          166.1          |         151.2         |
+| Variantie scholen    |          409.4          |         420.8         |
+| Variantie leerlingen |          3016.6         |         2871.3        |
+
+
+---
+class: inverse-red, middle, center
+
+# Time to pRactice!
+
+**Oefeningen en respons** terug te vinden op BB
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
