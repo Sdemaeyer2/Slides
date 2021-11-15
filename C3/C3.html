@@ -340,7 +340,7 @@ var(c(1,2,3,3,4,5,2,3,4))
 .footnotesize[
 
 ```r
-# Variantie tussen scholen
+# Variantie tussen klassen
 var(c(2,4,3))
 ```
 
@@ -349,7 +349,7 @@ var(c(2,4,3))
 ```
 
 ```r
-# Variantie binnen scholen
+# Variantie binnen klassen
 (var(c(1,2,3)) + var(c(3,4,5)) + var(c(2,3,4))) / 3
 ```
 
@@ -534,7 +534,7 @@ class: inverse-green, center, middle
 
 ## Pakketten in R
 
-Er bestaan verschillende paketten in R om multilevel analyses uit te voeren
+Er bestaan verschillende pakketten in R om multilevel analyses uit te voeren
 
 &lt;br&gt;
 
@@ -641,9 +641,9 @@ PIRLS_Model1 &lt;- lmer(
 summary(PIRLS_Model1)
 
 # ICC klasniveau
-166.1/(166.1 + 409.4 + 3016.6)
+166.1/(166.1 + 490.4 + 3016.6)
 # ICC schoolniveau
-409.4/(166.1 + 409.4 + 3016.6)
+490.4/(166.1 + 490.4 + 3016.6)
 ```
 ]
 
@@ -678,11 +678,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ```
-[1] 0.04624036
+[1] 0.04522066
 ```
 
 ```
-[1] 0.1139723
+[1] 0.1335112
 ```
 ]
 ]
@@ -823,10 +823,27 @@ Wat valt op als je naar de varianties kijkt?
 |                      | Nulmodel (oncond.) | ModelRI (cond.) |
 |----------------------|:-----------------------:|:---------------------:|
 | Variantie klassen    |          166.1          |         151.2         |
-| Variantie scholen    |          409.4          |         420.8         |
+| Variantie scholen    |          490.4          |         420.8         |
 | Variantie leerlingen |          3016.6         |         2871.3        |
 
+---
+class: inverse-blue
 
+## Blik op de toekomst
+
+Mogelijkheid tot **peerfeedback op tussentijdse versie van de paper**!
+
+Info volgt, maar voor nu alvast:
+
+- deadline indienen paper° **zondag 12 december**
+
+- peerfeedback via **Comproved** (maandag 13 december tot zondag 19 december)
+
+- bespreking tijdens C6 (23 december)
+
+.footnote[
+° *Tussentijdse versie = methodologieluik + OV1 + OV2*
+]
 ---
 class: inverse-red, middle, center
 
