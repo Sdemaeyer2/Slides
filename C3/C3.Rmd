@@ -247,7 +247,7 @@ knitr::include_graphics("Fig/Oplossing.png")
 
 ## Oude oplossing 1: AGGREGEREN
 
-```{r, out.height = "70%", out.width="70%", eval = T, echo = F}
+```{r, out.height = "65%", out.width="65%", eval = T, echo = F}
 knitr::include_graphics("Fig/Aggregeren.jpg")
 ```
 
@@ -269,7 +269,7 @@ Correlatie tussen ‘Illiteracy’ and ‘Nativity’ (foreign-born vs. rest):
 
 ## Oude oplossing 2: DESAGGREGEREN
 
-```{r, out.height = "70%", out.width="70%", eval = T, echo = F}
+```{r, out.height = "65%", out.width="65%", eval = T, echo = F}
 knitr::include_graphics("Fig/Desaggregeren.jpg")
 ```
 
