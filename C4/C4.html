@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GKN 2021-2022: C4</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+&lt;style&gt;
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.right-column{
+  padding-top: 0;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 75%;
+                                  }
+
+
+&lt;/style&gt;
+
+
+&lt;div class="my-logo-left"&gt; &lt;img src="img/UA-eng-hor-1-RGB.jpg" width="90%"/&gt; &lt;/div&gt;
+
+
+# GKN - Contactmoment 4
+.font160[
+.SW-greenD[Multilevel Analyse (Deel 2)] 
+]
+Sven De Maeyer &amp; Bea Mertens
+
+.font80[
+.UA-red[
+25/11/2021
+]
+]
+
+---
+class: inverse-green, center, middle
+
+# Random Intercepts
+
+*Herhaling...*
+
+---
+
+## Multilevel structuur...
+
+.pull-left[
+&lt;img src="Fig/boom.jpeg" width="75%" height="75%" /&gt;
+]
+.pull-right[
+&lt;img src="Fig/USA.png" width="75%" height="75%" /&gt;
+]
+
+---
+## Nulmodel
+
+
+```r
+Vlaanderen_1_2_3$Leesvaardigheid  &lt;- Vlaanderen_1_2_3$ASRREA01
+Vlaanderen_1_2_3$LeesvaardigheidZ &lt;- scale(Vlaanderen_1_2_3$ASRREA01)
+```
+
+**Model zonder enige voorspellers.** OOK *(Onconditioneel model)*    
+&lt;br&gt;
+
+Rol van **School** en **Klas** bij leesscores in PIRLS?
+
+.footnotesize[
+
+```r
+PIRLS_Model0 &lt;- lmer(Leesvaardigheid ~ 1 + (1|IDSCHOOL) + (1|IDCLASS), 
+                     data = Vlaanderen_1_2_3,
+                     REML = F)
+```
+]
+---
+## Nulmodel: resultaten
+.footnotesize[
+
+```r
+summary(PIRLS_Model0)
+```
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: Leesvaardigheid ~ 1 + (1 | IDSCHOOL) + (1 | IDCLASS)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 56785.5  56811.7 -28388.7  56777.5     5194 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4014 -0.6589  0.0139  0.7004  3.7464 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ IDCLASS  (Intercept)  166.1   12.89   
+ IDSCHOOL (Intercept)  490.4   22.14   
+ Residual             3016.6   54.92   
+Number of obs: 5198, groups:  IDCLASS, 277; IDSCHOOL, 148
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(&gt;|t|)    
+(Intercept)  523.846      2.175 143.213   240.8   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+]
+
+.UA-red[**Hoe groot is de impact van klassen/scholen?**]
+
+---
+## Nulmodel: ICC
+
+Effectgrootte, uitgedrukt in %
+
+
+```r
+# ICC klasniveau
+166.1/(166.1 + 490.4 + 3016.6)
+```
+
+```
+[1] 0.04522066
+```
+
+```r
+# ICC schoolniveau
+490.4/(166.1 + 490.4 + 3016.6)
+```
+
+```
+[1] 0.1335112
+```
+
+---
+## Random intercept model
+
+**Model met voorspellers.** OF **Conditioneel model**  
+
+&lt;br&gt;
+
+Rol van **School** en **Klas** bij leesscores in PIRLS,    
+
+na controle voor **Ouders_GraagLezenZ** en **Gender**?
+
+.footnotesize[
+
+```r
+PIRLS_ModelRI &lt;- lmer(
+  Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + 
+                     (1|IDSCHOOL) + (1|IDCLASS), 
+  data = Vlaanderen_1_2_3, REML = F)
+```
+]
+
+---
+## Random intercept model: formule
+&lt;img src="Fig/Geannoteerdefiguur.png" width="65%" height="65%" /&gt;
+
+---
+## Random intercept model: resultaten
+.footnotesize[
+
+```r
+summary(PIRLS_ModelRI)
+```
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 | IDSCHOOL) +  
+    (1 | IDCLASS)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 50414.6  50453.3 -25201.3  50402.6     4629 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5382 -0.6457  0.0261  0.6831  3.6867 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ IDCLASS  (Intercept)  151.2   12.30   
+ IDSCHOOL (Intercept)  420.8   20.51   
+ Residual             2871.3   53.58   
+Number of obs: 4635, groups:  IDCLASS, 275; IDSCHOOL, 147
+
+Fixed effects:
+                    Estimate Std. Error        df t value Pr(&gt;|t|)    
+(Intercept)         520.8727     2.2258  186.6044 234.011  &lt; 2e-16 ***
+GenderGirls          10.1501     1.6083 4492.7054   6.311 3.04e-10 ***
+Ouders_GraagLezenZ   11.4031     0.8162 4546.6389  13.972  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) GndrGr
+GenderGirls -0.372       
+Odrs_GrgLzZ  0.009 -0.010
+```
+]
+---
+## Random intercept model: resultaten
+
+
+```r
+# ICC klasniveau
+151.2/(151.2 + 420.8 + 2871.3)
+```
+
+```
+[1] 0.04391136
+```
+
+```r
+# ICC schoolniveau
+420.8/(151.2 + 420.8 + 2871.3)
+```
+
+```
+[1] 0.1222083
+```
+
+---
+## Random intercept model: resultaten (via tab_model)
+
+.pull-left[
+
+```r
+library(sjPlot)
+tab_model(PIRLS_ModelRI, 
+          show.se = TRUE,
+          show.ci = FALSE,
+          show.icc = FALSE, 
+          show.aic = FALSE, 
+          show.r2 = FALSE)
+```
+]
+.pull-right[
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Leesvaardigheid&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;std. Error&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;520.87&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;2.23&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Gender: Girls&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;10.15&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;1.61&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Ouders Graag Lezen Z&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;11.40&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.82&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;"&gt;Random Effects&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;2871.34&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt; &lt;sub&gt;IDCLASS&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;151.19&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt; &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;420.81&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;147&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N &lt;sub&gt;IDCLASS&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;275&lt;/td&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;4635&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+]
+---
+## Random intercept model: significantie random effecten?
+Via de functie `confint` uit pakket `lme4` kan je betrouwbaarheidsintervallen voor de random effecten opvragen
+
+&lt;br&gt;
+
+
+```r
+# Eerst via VarCorr( ) enkel de varianties uit de output opnieuw opvragen...
+VarCorr(PIRLS_ModelRI)
+```
+
+```
+ Groups   Name        Std.Dev.
+ IDCLASS  (Intercept) 12.296  
+ IDSCHOOL (Intercept) 20.514  
+ Residual             53.585  
+```
+
+```r
+# Vervolgens via confint( ) de CI's berekenen
+ModelRI_CI &lt;- confint(PIRLS_ModelRI, level =.95)
+ModelRI_CI
+```
+
+```
+                        2.5 %    97.5 %
+.sig01               9.045146  15.72210
+.sig02              16.949180  24.39561
+.sigma              52.479054  54.73002
+(Intercept)        516.484187 525.25623
+GenderGirls          6.997138  13.30317
+Ouders_GraagLezenZ   9.800949  13.00573
+```
+
+---
+## Random intercept model: visualisatie (1)
+.pull-left[
+In OLP staat functie `xyplot( )` uit het pakket `lattice`...    
+
+Geeft hier een raar resultaat. Hoe komt dat?
+
+
+```r
+library(lattice)
+
+xyplot(fitted(PIRLS_ModelRI)~Ouders_GraagLezenZ,
+      group=IDSCHOOL,
+      data=Vlaanderen_1_2_3,
+      type='r')
+```
+]
+
+.pull-right[
+&lt;img src="C4_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Random intercept model: visualisatie (2)
+
+`xyplot()` uit `lattice` wordt gebruikt om "fitted values" (dus voorspellingen op basis van heel ons model) te plotten    
+
+&lt;br&gt;
+
+In ons model zit: 
+
+- **Ouders_GraagLezenZ** en **IDSCHOOL** (wat we willen plotten) 
+- maar ook **Gender** en **IDCLASS**
+
+Vandaar dat de lijntjes niet mooi parallel lopen...
+
+&lt;br&gt;
+
+Dus werkt alleen bij model met 1 voorspeller en enkel 2 levels (bv. kinderen genest in scholen)
+---
+## Random intercept model: visualisatie (3)
+
+We kunnen het wel plotten... maar met de nodige complexiteit 
+
+&lt;img src="C4_files/figure-html/unnamed-chunk-18-1.png" width="1080" style="display: block; margin: auto;" /&gt;
+
+---
+## Random intercept model: visualisatie (4)
+Vb. effect van scholen tonen
+.small[
+
+```r
+# Pakket ggeffects nodig om voorspelde scores te berekenen
+library(ggeffects)
+
+# Random effecten (school en klas) moeten gebaseerd zijn op categorische variabele. 
+#cDus hier eerst nieuwe gecategoriseerde variant maken
+Vlaanderen_1_2_3$School &lt;- as.factor(Vlaanderen_1_2_3$IDSCHOOL)
+Vlaanderen_1_2_3$Class  &lt;- as.factor(Vlaanderen_1_2_3$IDCLASS)
+
+# Model opnieuw schatten met gecategoriseerde variant
+PIRLS_ModelRI &lt;- lmer(Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1|School) + (1|Class), 
+                      data = Vlaanderen_1_2_3,REML = F)
+
+# Voorspelde scores op niveau van school vragen met als voorspeller Ouders_GraagLezenZ 
+# en wegschrijven in een nieuw object met naam Pred
+Pred &lt;- ggpredict(PIRLS_Model2, terms = c("Ouders_GraagLezenZ", "School"), type = "re")
+```
+]
+
+---
+## Random intercept model: visualisatie (4)
+Vb. effect van scholen tonen (vervolg)
+.small[
+
+```r
+# Pakket ggplot2 nodig om de grafiek te maken
+library(ggplot2)
+
+# Basis leggen voor de grafiek (gebaseerd op object Pred dat we hierboven maakten); 
+# aes() om de x-as, y-as en groepvariabele te maken; 
+# geom_line() om aan te geven dat we lijntjes willen; 
+# scale_y_continuous( ) om de range van y-as te bepalen;
+# theme() om de titels te lay-outen
+P1 &lt;- ggplot(Pred, aes(x,predicted, group=group)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(400, 600)) + 
+  theme(axis.title = element_text(face="bold"), plot.title = element_text(face="italic"))
+
+# P1 'printen' met titel 'Scholen' en aangepaste x- en y-as labels
+P1 + ggtitle("Scholen") + labs(y="Verwachte leesscores", x = "Ouders Graag Lezen (z)")
+```
+]
+
+---
+## Wat leren we conceptueel van dit model?
+
+.pull-left[
+&lt;img src="C4_files/figure-html/unnamed-chunk-21-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+---
+
+## Wat leren we conceptueel van dit model?
+.pull-left[
+&lt;img src="C4_files/figure-html/unnamed-chunk-22-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+Zijn sommige scholen beter dan andere in het wegwerken van verschillen op basis van achtergrond (Ouders_GraagLezenZ in dit geval)?
+
+&lt;br&gt;
+= vraag naar .UA-red[differentiële effectiviteit]
+]
+
+---
+class: inverse-green, middle, center
+
+# Random slopes
+*Spaghetti time ...*
+---
+## Basisidee (1)
+
+`\(Eindscore_{ij} = \beta_0 + \beta_{1} * SES_{ij} + (\mu_{0j} + \mu_{1j}*SES_{ij}+\epsilon_{ij})\)`
+
+
+&lt;img src="C4_files/figure-html/unnamed-chunk-23-1.png" width="504" style="display: block; margin: auto;" /&gt;
+---
+## Basisidee (2)
+
+3 scholen, dus 3 verschillende intercepten en slopes:
+
+`\(Eindscore_{ij} = \beta_0 + \beta_{1} * SES_{ij} + (\mu_{0j} + \mu_{1j}*SES_{ij}+\epsilon_{ij})\)`
+
+.pull-left[
+|             |**Intercept**| `\(\mu_{0j}\)`    |**Slope**| `\(\mu_{1j}\)` |
+|-------------|:----------:|:--------------:|:-------:|:-----------:|
+| School 1    |    500.00   |    -19.62      |   30   |      5      |
+| School 2    |    519.62   |   0.00         |   25   |      0      |      
+| School 3    |    539.24   |     19.62      |   20   |      -5     |
+]
+.pull-right[
+&lt;img src="C4_files/figure-html/unnamed-chunk-24-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+---
+## PIRLS voorbeeld 1
+
+Effect van **Ouders_GraagLezenZ** in elke school even sterk?
+
+
+```r
+PIRLS_ModelRS_lezen &lt;- lmer(Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + 
+*                          (1 + Ouders_GraagLezenZ|IDSCHOOL) + 
+                           (1|IDCLASS), 
+                           data = Vlaanderen_1_2_3, REML = F)
+```
+
+
+---
+## PIRLS voorbeeld 1: resultaten
+.footnotesize[
+
+```r
+summary(PIRLS_ModelRS_lezen)
+```
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: 
+Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 + Ouders_GraagLezenZ |  
+    IDSCHOOL) + (1 | IDCLASS)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 50416.6  50468.2 -25200.3  50400.6     4627 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5351 -0.6483  0.0292  0.6893  3.6977 
+
+Random effects:
+ Groups   Name               Variance Std.Dev. Corr 
+ IDCLASS  (Intercept)         148.018 12.17         
+ IDSCHOOL (Intercept)         422.989 20.57         
+          Ouders_GraagLezenZ    1.989  1.41    -1.00
+ Residual                    2870.164 53.57         
+Number of obs: 4635, groups:  IDCLASS, 275; IDSCHOOL, 147
+
+Fixed effects:
+                    Estimate Std. Error        df t value Pr(&gt;|t|)    
+(Intercept)         520.9351     2.2253  186.4369 234.092  &lt; 2e-16 ***
+GenderGirls          10.1115     1.6083 4492.9865   6.287 3.55e-10 ***
+Ouders_GraagLezenZ   11.5123     0.8247 1472.4862  13.959  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) GndrGr
+GenderGirls -0.371       
+Odrs_GrgLzZ -0.107 -0.010
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see ?isSingular
+```
+]
+
+---
+## PIRLS voorbeeld 1: resultaten
+
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Leesvaardigheid&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;std. Error&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;520.94&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;2.23&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Gender: Girls&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;10.11&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;1.61&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Ouders Graag Lezen Z&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;11.51&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.82&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;"&gt;Random Effects&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;2870.16&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt; &lt;sub&gt;IDCLASS&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;148.02&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt; &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;422.99&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;11&lt;/sub&gt; &lt;sub&gt;IDSCHOOL.Ouders_GraagLezenZ&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;1.99&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;rho;&lt;sub&gt;01&lt;/sub&gt; &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;-1.00&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;147&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N &lt;sub&gt;IDCLASS&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;275&lt;/td&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;4635&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+---
+
+## PIRLS voorbeeld 1: modelvergelijking
+
+Welk model is best?
+&lt;br&gt;
+
+
+```r
+anova(PIRLS_ModelRI, PIRLS_ModelRS_lezen, test="Chi")
+```
+
+```
+Data: Vlaanderen_1_2_3
+Models:
+PIRLS_ModelRI: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 | IDSCHOOL) + (1 | IDCLASS)
+PIRLS_ModelRS_lezen: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 + Ouders_GraagLezenZ | IDSCHOOL) + (1 | IDCLASS)
+                    npar   AIC   BIC logLik deviance Chisq Df Pr(&gt;Chisq)
+PIRLS_ModelRI          6 50415 50453 -25201    50403                    
+PIRLS_ModelRS_lezen    8 50417 50468 -25200    50401 1.986  2     0.3705
+```
+
+---
+
+## PIRLS voorbeeld 2
+
+&gt; Onderzoeksvraag: Is het verschil tussen jongens en meisjes in elke school even sterk?
+
+&lt;br&gt;
+
+
+```r
+PIRLS_ModelRS_gender &lt;- lmer(Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + 
+                            (1 + Gender|IDSCHOOL) +   (1|IDCLASS), 
+                            data = Vlaanderen_1_2_3, REML = F)
+```
+
+---
+
+## PIRLS voorbeeld 2: modelvergelijking (1)
+
+Welk model is best, met of zonder random slopes voor gender?
+
+&lt;br&gt;
+
+
+```r
+anova(PIRLS_ModelRI, PIRLS_ModelRS_gender, test="Chi")
+```
+
+```
+Data: Vlaanderen_1_2_3
+Models:
+PIRLS_ModelRI: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 | IDSCHOOL) + (1 | IDCLASS)
+PIRLS_ModelRS_gender: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 + Gender | IDSCHOOL) + (1 | IDCLASS)
+                     npar   AIC   BIC logLik deviance  Chisq Df Pr(&gt;Chisq)   
+PIRLS_ModelRI           6 50415 50453 -25201    50403                        
+PIRLS_ModelRS_gender    8 50409 50461 -25197    50393 9.3953  2   0.009117 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+## PIRLS voorbeeld 2: modelvergelijking (2)
+
+Welk model is best, met random slopes voor gender of Ouders_GraagLezenZ?
+
+&lt;br&gt;
+
+
+```r
+anova(PIRLS_ModelRS_lezen, PIRLS_ModelRS_gender, test="Chi")
+```
+
+```
+Data: Vlaanderen_1_2_3
+Models:
+PIRLS_ModelRS_lezen: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 + Ouders_GraagLezenZ | IDSCHOOL) + (1 | IDCLASS)
+PIRLS_ModelRS_gender: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 + Gender | IDSCHOOL) + (1 | IDCLASS)
+                     npar   AIC   BIC logLik deviance  Chisq Df Pr(&gt;Chisq)
+PIRLS_ModelRS_lezen     8 50417 50468 -25200    50401                     
+PIRLS_ModelRS_gender    8 50409 50461 -25197    50393 7.4094  0           
+```
+
+---
+
+## PIRLS voorbeeld 2: resultaten
+.footnotesize[
+
+```
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: Leesvaardigheid ~ 1 + Gender + Ouders_GraagLezenZ + (1 + Gender |  
+    IDSCHOOL) + (1 | IDCLASS)
+   Data: Vlaanderen_1_2_3
+
+     AIC      BIC   logLik deviance df.resid 
+ 50409.2  50460.8 -25196.6  50393.2     4627 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5110 -0.6452  0.0260  0.6758  3.6793 
+
+Random effects:
+ Groups   Name        Variance Std.Dev. Corr 
+ IDCLASS  (Intercept)  152.9   12.37         
+ IDSCHOOL (Intercept)  526.1   22.94         
+          GenderGirls  120.1   10.96    -0.54
+ Residual             2841.3   53.30         
+Number of obs: 4635, groups:  IDCLASS, 275; IDSCHOOL, 147
+
+Fixed effects:
+                   Estimate Std. Error       df t value Pr(&gt;|t|)    
+(Intercept)         520.715      2.398  139.471 217.126  &lt; 2e-16 ***
+GenderGirls          10.403      1.883  117.373   5.524 2.03e-07 ***
+Ouders_GraagLezenZ   11.476      0.815 4539.061  14.082  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            (Intr) GndrGr
+GenderGirls -0.522       
+Odrs_GrgLzZ  0.010 -0.013
+```
+]
+---
+
+## PIRLS voorbeeld 2: visualisatie
+
+&lt;img src="C4_files/figure-html/unnamed-chunk-34-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Betekenis correlatie intercept &amp; slope
+
+&lt;img src="C4_files/figure-html/unnamed-chunk-35-1.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Let op met interpretatie intercept varianties
+
+.UA-red[Intercept variantie] afhankelijk schaal **SES**! (cfr. waar is de nul...?)
+
+&lt;img src="C4_files/figure-html/unnamed-chunk-36-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Let op met interpretatie correlatie tss'en intercept en slope
+
+.UA-red[Covariantie (dus ook correlatie) tussen Intercept en Slope] afhankelijk schaal **SES**!
+
+&lt;img src="C4_files/figure-html/unnamed-chunk-37-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+---
+
+## ICC?!
+
+Formule bij random intercept model:
+
+&lt;br&gt;
+
+`\(ICC = \frac{\sigma_{\mu_{0j}}^2}{\sigma_{\mu_{0j}}^2 + \sigma_{\epsilon_{0ij}}^2}=\frac{var_{scholen}}{var_{scholen} + var_{lln}}\)`
+
+&lt;br&gt;
+
+Maar wat is de .UA-red[totale variantie in een random slope model]? .Large[🤔]    
+
+Hangt af van... 
+
+---
+
+## Enkele praktische richtlijnen (1)
+
+- Denk goed na over de schaal van de variabelen
+  * onafhankelijke variabelen evt centreren?
+  * eventueel z-scores maken van de onafhankelijke variabelen?
+
+&lt;br&gt;
+&lt;br&gt;
+
+- .Large[☝️] Beperkte variantie in een random intercepts model op een bep. niveau is .UA-red[**GEEN**] reden om geen random slopes te schatten indien dit inhoudelijk toch relevant zou zijn 
+
+&lt;br&gt;
+&lt;br&gt;
+
+
+- Tracht spaarzaam te zijn! Dus geen overload aan random slopes in een model...
+
+---
+
+## Enkele praktische richtlijnen (2)
+
+- Vertaal onderzoeksvragen in (reeks) van modellen
+
+&lt;br&gt;
+&lt;br&gt;
+
+- Hanteer modelvergelijkingen
+
+&lt;br&gt;
+&lt;br&gt;
+
+- Rapporteer ALLEEN parameterschattingen van het best passend model
+
+&lt;br&gt;
+&lt;br&gt;
+
+- Maak gebruik van tabellen en visualisaties
+
+---
+
+## Rapportage: toepassing
+
+&gt; *Is het effect van leesplezier op leesvaardigheid afhankelijk van de school waarin een leerling les volgt, na controle voor geslacht en betrokkenheid?*
+
+&lt;br&gt;
+
+
+```r
+# Alle kwantitatieve variabelen standaardiseren
+Vlaanderen_1_2_3$LeesplezierZ   &lt;- scale(Vlaanderen_1_2_3$ASBGERL)
+Vlaanderen_1_2_3$BetrokkenheidZ &lt;- scale(Vlaanderen_1_2_3$ASBHPLR)
+
+# Model schatten
+PIRLS_Toepassing &lt;- lmer(LeesvaardigheidZ ~ 1 + Gender + LeesplezierZ + BetrokkenheidZ +
+                         (1 + LeesplezierZ|IDSCHOOL) + (1|IDCLASS), 
+                         data = Vlaanderen_1_2_3, REML = F)
+
+# Nulmodel met afhankelijke ook als z-score
+PIRLS_M0z &lt;- lmer(LeesvaardigheidZ ~ 1 +
+                         (1 |IDSCHOOL) + (1|IDCLASS), 
+                         data = Vlaanderen_1_2_3, REML = F)
+```
+
+---
+
+## Relevante informatie? Wat in tabel? Visualisaties?
+.left-column[
+.footnotesize[
+
+```r
+tab_model(
+  PIRLS_M0z,
+  PIRLS_Toepassing,
+  show.ci = F,
+  show.aic = T,
+  show.icc = F,
+  show.se = T,
+  show.r2 = F,
+  show.ngroups = F)
+```
+]
+]
+
+.right-column[
+.small[
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="2" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Leesvaardigheid Z&lt;/th&gt;
+&lt;th colspan="2" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Leesvaardigheid Z&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;std. Error&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;std. Error&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.01 &lt;sup&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.04&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.05 &lt;sup&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.04&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Gender: Girls&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.16 &lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.03&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Leesplezier Z&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.04 &lt;sup&gt;*&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.02&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Betrokkenheid Z&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.19 &lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.01&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="5" style="font-weight:bold; text-align:left; padding-top:.8em;"&gt;Random Effects&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.83&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.78&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.05 &lt;sub&gt;IDCLASS&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.04 &lt;sub&gt;IDCLASS&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.13 &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.12 &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;11&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;0.00 &lt;sub&gt;IDSCHOOL.LeesplezierZ&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;rho;&lt;sub&gt;01&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;-0.30 &lt;sub&gt;IDSCHOOL&lt;/sub&gt;&lt;/td&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="2"&gt;5198&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="2"&gt;4619&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;AIC&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;14149.725&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2"&gt;12337.919&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="5" style="font-style:italic; border-top:double black; text-align:right;"&gt;* p&amp;lt;0.05&amp;nbsp;&amp;nbsp;&amp;nbsp;** p&amp;lt;0.01&amp;nbsp;&amp;nbsp;&amp;nbsp;*** p&amp;lt;0.001&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+]
+]
+---
+class: inverse-red, middle, center
+
+# Time to pRactice!
+
+**Oefeningen en respons** terug te vinden op BB
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

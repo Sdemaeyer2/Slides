@@ -12,13 +12,13 @@ Zelf kan je eveneens een pdf-file maken indien je de slides open hebt staan in j
 
 ### De slides:
 
-Contactmoment 1 [DEEL 1](C1/C1_Deel1.html) & [DEEL 2](C1/C1_deel2.html)
+Contactmoment 1 [DEEL 1](C1/C1_Deel1.html) ([pdf](C1/C1_1.pdf)) & [DEEL 2](C1/C1_deel2.html) ([pdf](C1/C1_2.pdf))
 
-Contactmoment 2 [Slides](C2/C2.html)
+Contactmoment 2 [Slides](C2/C2.html) ([pdf](C2/C2.pdf))
 
-Contactmoment 3 [Slides](C3/C3.html)
+Contactmoment 3 [Slides](C3/C3.html) ([pdf](C3/C3.pdf))
 
-Contactmoment 4
+Contactmoment 4 [Slides](C4/C4.html) ([pdf](C4/C4.pdf))
 
 Contactmoment 5
 
