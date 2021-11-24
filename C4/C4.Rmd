@@ -97,6 +97,14 @@ knitr::include_graphics("Fig/USA.png")
 ```
 ]
 
+
+---
+## Waarom multilevel?
+
+```{r, out.height = "30%", out.width="30%", eval = T, echo = F, fig.align="center"}
+knitr::include_graphics("Fig/twitter_MarcVanRanst_aggregatie.jpg")
+```
+
 ---
 ## Nulmodel
 
