@@ -20,6 +20,6 @@ Contactmoment 3 [Slides](C3/C3.html) ([pdf](C3/C3.pdf))
 
 Contactmoment 4 [Slides](C4/C4.html) ([pdf](C4/C4.pdf))
 
-Contactmoment 5
+Contactmoment 5 [Slides](C5/C5.html)
 
 Contactmoment 6

@@ -1,0 +1,850 @@
+---
+title: "GKN 2020-2021: Contactmoment 5"
+subtitle: "Logistische regressieanalyse"
+author: "Tine van Daal & Sofie Vermeiren"
+date: 
+fontsize: 10pt
+always_allow_html: yes
+output: 
+  beamer_presentation:
+    keep_tex: yes
+    toc: yes
+    slide_level: 2
+    includes:
+      in_header: edubron-beamer-header-simple.txt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, tidy = TRUE)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)})
+```
+
+```{r ,warning=F,message=F,echo=F}
+setwd("~/Documents/Onderwijs/GKN/2020-2021/Presentaties/C5")
+library(dplyr)
+library(knitr)
+library(tidyr)
+library(purrr)
+library(ggplot2)
+load("Vlaanderen_1_2_3.RData")
+source(file = "OLP2 Functies.R")
+```
+
+# Categorische afhankelijke variabelen
+
+##
+\textcolor{uarood}{Categorische afhankelijke variabelen}
+\begin{center}
+\includegraphics[width=0.35\textwidth]{to_be_or_not_to_be.jpg}  
+\end{center}
+
+## Categorische afhankelijke variabelen
+
+Enkele klassiekers:
+
+- Al dan niet slagen;
+- Al dan niet doorstromen;
+- Al dan niet falen;
+- Al dan niet nieuwe job;
+- Al dan niet norm halen;
+- ...     
+\bigskip    
+
+Soms ook handig bij numerieke variabelen ...
+
+## Categorische afhankelijke variabelen
+
+Variabelen met meerdere categorieën zijn herleidbaar tot een reeks van \textbf{'dummyvariabelen'}
+
+\bigskip
+
+Voor elke categorie kan je een variabele maken die aangeeft of een respondent al dan niet tot die categorie behoort
+
+
+## Onderpresteerders... in PIRLS
+
+Leesvaardigheid van Vlaamse lln. in 5 categorieën ingedeeld (variabele ASRIBM01):
+
+1. BELOW 400                     (code 1)
+2. AT OR ABOVE 400 BUT BELOW 475 (code 2)
+3. AT OR ABOVE 475 BUT BELOW 550 (code 3)
+4. AT OR ABOVE 550 BUT BELOW 625 (code 4)
+5. AT OR ABOVE 625               (code 5)
+
+\bigskip
+Code 1 en 2 samen vormen een groep van onderpresterende leerlingen
+
+```{r, comment = ""}
+table(Vlaanderen_1_2_3$ASRIBM01)
+```
+
+
+## Onderpresteerders - afhankelijke var. hercoderen
+
+Eerst \textbf{hercoderen}... 
+
+\bigskip
+
+\textbf{Dummyvariabele} maken die aanstaat voor 'Onderpresteren' (dus voor leerlingen met code 1 of 2 voor de variabele `ASRIBM01`)
+
+\bigskip
+
+```{r, echo = T, warning = F, message = F, error = F, comment="", size="tiny", tidy=TRUE}
+library(car)
+Vlaanderen_1_2_3$Onderpresteren <- recode(Vlaanderen_1_2_3$ASRIBM01,
+                                          '1=1;2=1;3=0;4=0;5=0')
+table(Vlaanderen_1_2_3$ASRIBM01, Vlaanderen_1_2_3$Onderpresteren)
+```
+
+
+## Onderpresteerders - voorspeller? 
+
+\textcolor{uarood}{Is het zo dat jongens een grotere kans hebben om onder te presteren dan meisjes?}
+\bigskip
+```{r, echo = T, warning = F, message = F, error = F, comment="", size="tiny", tidy=TRUE}
+Vlaanderen_1_2_3$Gender <- recode(Vlaanderen_1_2_3$ASBG01,
+                                  "1 = 'Girls'; 2 = 'Boys'") 
+kruistabel.kolom(Vlaanderen_1_2_3$Onderpresteren, Vlaanderen_1_2_3$Gender)
+```
+
+
+## Onderpresteerders - kansen! (1)
+
+\textbf{Wat is de kans op ....?}
+
+1. onderpresteren?    
+2. onderpresteren voor jongens?    
+3. onderpresteren voor meisjes?    
+4. onderpresteren voor meisjes - onderpresteren voor jongens?
+
+\bigskip
+```{r, echo = F, warning = F, message = F, error = F, comment=""}
+kruistabel.kolom(Vlaanderen_1_2_3$Onderpresteren , Vlaanderen_1_2_3$Gender)
+```
+
+## Onderpresteerders - kansen! (2)
+
+\textbf{Wat is de kans op....?}
+
+\begin{eqnarray}
+P(Onderpr.) & = &.202\\
+P(Onderpr.|Boys) & = &.224\\
+P(Onderpr.|Girls) & = &.180\\
+P(Onderpr.|Girls) - P(Onderpr.|Boys) & = &.180 - .224 \\
+& = & -.044
+\end{eqnarray}
+
+## Dummy als afhankelijke variabele? (1)
+
+\textbf{Waarom niet gewoon dummy als afhankelijke variabele?}
+
+\bigskip
+
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny", comment=""}
+Model_Dummy <- lm(Onderpresteren ~ Gender, data = Vlaanderen_1_2_3)
+summary(Model_Dummy)
+```
+
+
+## Dummy als afhankelijke variabele? (2)
+
+\textbf{Kans op onderpresteren voor een meisje?}
+
+\bigskip
+
+```{r, echo = F, warning = F, message = F, error = F, size = "tiny", comment=""}
+summary(Model_Dummy)
+```
+
+\medskip
+
+
+## Dummy als afhankelijke variabele? (3)
+
+**Kans op onderpresteren voor een leerling wiens ouders 3 SD hoger dan gemiddeld scoren op Ouders_GraagLezenZ?**
+
+\bigskip
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny", comment="", tidy="styler"}
+Vlaanderen_1_2_3$Ouders_GraagLezenZ <- scale(Vlaanderen_1_2_3$ASBHPLR) 
+Model_Dummy2                        <- lm(Onderpresteren ~ Ouders_GraagLezenZ,
+                                          data = Vlaanderen_1_2_3)
+summary(Model_Dummy2)
+```
+
+## Dummy als afhankelijke variabele? (4)
+
+```{r, warning = F , error = F , message = F, comment=""}
+library(ggplot2)
+Ouders_GraagLezenZ <- seq(-4 , 4 , .05)
+Predicted_prob_Onderpresteren <- 0.189537 + (-0.060328 * Ouders_GraagLezenZ)
+Onzin <- car::recode(Predicted_prob_Onderpresteren,
+                     ' -2:-0.0000001 = "Onzin"; 0.0000001:1 = "Geen onzin" ')
+Onzin <- relevel(as.factor(Onzin), "Onzin")
+
+qplot(Ouders_GraagLezenZ,Predicted_prob_Onderpresteren,col=Onzin) + geom_hline(yintercept = 0)
+```
+
+
+## Problemen met dummyvariabelen als afhankelijke variabele
+
+Probabiliteiten zijn gelimiteerd tussen 0 en 1
+
+\bigskip
+
+$\rightarrow$  Regressielijn kan onmogelijke waarden bevatten
+
+$\rightarrow$  Kan leiden tot onzinnige schattingen
+
+$\rightarrow$  Hoe meer 'gemiddelde kans' afwijkt van 50%, hoe groter kans op onzinnige schattingen
+
+# Non-lineariteit
+
+##
+
+\textcolor{uarood}{Non-lineariteit}
+
+## Lineaire regressie is hier problematisch!
+
+
+\begincols
+  \begincol{.49\textwidth}
+
+```{r,out.height="95%"}
+
+X <- c(rnorm( 40 , mean = -1 , sd = 1), rnorm( 40, mean = 1 , sd = 1))
+Y <- c(rep( 0 , 40) , rep ( 1 , 40))
+
+qplot(X,Y, ylab = 'Probabiliteit', ylim = c(-0.25,1.25)) + geom_abline(slope = 0.25, intercept = 0.50, col="red")
+
+```
+  \endcol
+  \begincol{.49\textwidth}
+    \begin{itemize}
+       \item We krijgen aan de uiteinden problemen met onrealistische schattingen... 
+    \end{itemize}
+  \endcol
+\endcols
+
+
+## Oplossing 1
+
+\begincols
+  \begincol{.49\textwidth}
+
+```{r, out.height="50%", echo = F}
+set.seed(1975)
+X <- c(rnorm( 40 , mean = -1 , sd = 1), rnorm( 40, mean = 1 , sd = 1))
+Y <- c(rep( 0 , 40) , rep ( 1 , 40))
+
+D <- data.frame(dx = c(-3.5,-1,1), dy = c(0,0,1), vx = c(-1,1,3.5), vy = c(0,1,1) )
+qplot(X,Y, ylab = 'Probabiliteit', ylim = c(-0.25,1.25)) + geom_segment(D, mapping = aes( x = dx, y = dy , xend = vx , yend = vy), color="red", size = 1.25)
+```
+  \endcol
+  \begincol{.49\textwidth}
+    \begin{itemize}
+     \item Dit model is \textbf{DETERMINISTISCH}: vanaf een bepaalde waarde voor X is de kans gelijk aan 0% of 100%!
+    \end{itemize}
+  \endcol
+\endcols
+
+
+## Oplossing 2
+
+\begincols
+  \begincol{.49\textwidth}
+```{r, out.height="50%", echo=F, message=F}
+set.seed(1975)
+X <- c(rnorm( 40 , mean = -1 , sd = 1), rnorm( 40, mean = 1 , sd = 1))
+Y <- c(rep( 0 , 40) , rep ( 1 , 40))
+
+D <- data.frame(dx = c(-3.5,-1,1), dy = c(0,0,1), vx = c(-1,1,3.5), vy = c(0,1,1) )
+qplot(X,Y, ylab = 'Probabiliteit', ylim = c(-0.25,1.25)) + geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), colour=I("red"),
+    se = FALSE) 
+```
+  \endcol
+  \begincol{.49\textwidth}
+     \begin{itemize}
+        \item Dit model is \textbf{REALISTISCHER}: Vanaf een bepaalde waarde voor X benadert de kans 0% of 100%, maar is nooit exact 0% of 100%!
+        \item Dit model is \textbf{NIET-LINEAIR}: Kansen nemen niet lineair toe of af overheen de schaal van X
+     \end{itemize}
+  \endcol
+\endcols
+
+## Voorbeelden uit het 'dagelijkse leven' (1)
+
+\begincols
+  \begincol{.49\textwidth}
+  
+```{r, out.height="50%", echo=F, message=F}
+set.seed(1975)
+Inkomen <- c(rnorm( 250 , mean = 1500 , sd = 650), rnorm( 250, mean = 2500 , sd = 650))
+Prob_Huis <- c(rep( 0 , 250) , rep ( 1 , 250))
+
+qplot(Inkomen,Prob_Huis, ylab = 'Probabiliteit eigen huis') + geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), colour=I("red"),
+    se = FALSE) 
+```
+
+  \endcol
+  \begincol{.49\textwidth}
+    \begin{itemize}
+       \item Kans om een eigen huis te bezitten is hoger voor gezinnen met hoger inkomen
+       \item Toch ook gezinnen met hoog inkomen die geen eigen huis bezitten en vice versa
+       \item 200€ meer verdienen heeft geen gelijkaardige impact (tussen 1500€ en 2500€ is de impact het sterkst)
+    \end{itemize}    
+  \endcol
+\endcols
+
+## Voorbeelden uit het 'dagelijkse leven' (2a)
+
+\begincols
+  \begincol{.49\textwidth}
+  
+```{r, out.height="50%", echo=F, message=F}
+set.seed(1975)
+Lichaamslengte <- c(rnorm( 300 , mean = 183 , sd = 8), rnorm( 300, mean = 165 , sd = 7.2))
+Prob_Meisje <- c(rep( 0 , 300) , rep ( 1 , 300))
+
+qplot(Lichaamslengte,Prob_Meisje, ylab = 'Probabiliteit Meisje') + geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), colour=I("red"),
+    se = FALSE) 
+```
+
+  \endcol
+  \begincol{.49\textwidth}
+    \begin{itemize}
+     \item Hoe groter lichaamslengte, hoe kleiner de kans dat het een meisje is
+     \item Toch ook grote meisjes en kleine jongens
+     \item 1cm groter of kleiner zijn heeft geen gelijkaardige impact
+    \end{itemize}
+  \endcol
+\endcols
+
+
+## Voorbeelden uit het 'dagelijkse leven' (2b)
+
+\begincols
+  \begincol{.49\textwidth}
+  
+```{r, out.height="50%", echo=F, message=F}
+set.seed(1975)
+Lichaamslengte <- c(rnorm( 300 , mean = 162 , sd = 6.2), rnorm( 300, mean = 184 , sd = 7))
+Prob_Jongen <- c(rep( 0 , 300) , rep ( 1 , 300))
+
+qplot(Lichaamslengte,Prob_Jongen, ylab = 'Probabiliteit Jongen') + geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), colour=I("red"),
+    se = FALSE) 
+```
+
+  \endcol
+  \begincol{.49\textwidth}
+    \begin{itemize}
+      \item Net hetzelfde model kan 'gespiegeld' worden!
+    \end{itemize}
+  \endcol
+\endcols
+
+# Logits
+
+##
+
+\textcolor{uarood}{Let's talk in LOGITS...}
+\medskip
+\begin{center}
+\includegraphics[width=0.75\textwidth]{Probability.jpg}
+\end{center}
+
+## Kansen op een andere schaal uitgedrukt
+Probabiliteiten $\rightarrow$ Odds $\rightarrow$ Logits
+
+
+## Odds
+
+De \textcolor{uarood}{Odds} voor een 'event' is:
+
+$$
+Odds(Y = 1) = \frac{P(Y = 1)}{1-P(Y = 1)} = \frac{P(Y = 1)}{P(Y \ne 1)}
+$$
+
+## Odds - voorbeeld onderpresteren
+
+Kans op onderpresteren is 0.25 keer groter dan de kans op niet onderpresteren    
+Kans op onderpresteren is 1/0.25 keer kleiner dan kans op niet onderpresteren    
+
+\smallskip
+
+$$
+Odds(Onderpr. = 1) = \frac{P(Onderpr. = 1)}{1-P(Onderpr. = 1)} =  \frac{0.202}{0.798}=0.253
+$$
+\bigskip
+
+Kans op niet onderpresteren is 4 keer groter dan kans op onderpresteren    
+Kans op niet onderpresteren is 1/4 keer kleiner dan kans op onderpresteren    
+
+\smallskip
+$$
+Odds(Onderpr. = 0) = \frac{P(Onderpr. = 0)}{1-P(Onderpr. = 0)} =  \frac{0.798}{0.202}=3.95
+$$
+
+## Enkele odds...
+
+\begin{table}[]
+\begin{tabular}{lr}
+\hline
+\textbf{Probabiliteit} & \textbf{Odds}     \\ \hline
+0.10          & (= 0.1/0.9) = 0.11 \\ 
+0.30          & 0.43               \\ 
+0.50          & 1.00               \\ 
+0.70          & 2.33               \\ 
+0.90          & 9.00               \\ \hline
+\end{tabular}
+\end{table}
+
+\bigskip
+Loopt van $0$ tot $\infty$
+
+## Odds zijn echter niet superhandig
+
+- Nog steeds een nulwaarde
+- Niet symmetrisch
+- Dus niet handig voor lineaire modellen...
+
+## Tijd voor logits
+
+\textcolor{uarood}{Logit} is het natuurlijk logaritme van een Odds:
+
+$$
+Logits(Onderpr. = 1) = \ln(Odds) = \ln(0.253) = -1.347
+$$
+
+## Uitstapje naar ... logaritmes
+
+$$\log_a(x) \rightarrow  a^? = x $$
+
+$$\log_{10}(10) \rightarrow 10^?=10 \rightarrow 10^1=10  $$
+
+$$\log_{10}(1) \rightarrow 10^?=1 \rightarrow 10^0=1  $$
+
+$$\log_{10}(100) \rightarrow 10^?=100 \rightarrow 10^2=100  $$
+
+## Natuurlijk logaritme
+
+$$\ln(x) = \log_e(x) \rightarrow  e^? = x $$
+
+met:
+
+$$e=2,718281828$$
+
+$$\ln(1) \rightarrow e^?=1 \rightarrow e^0=1  $$
+
+$$\ln(10) \rightarrow e^?=10 \rightarrow e^{2.303}=10  $$
+
+## Enkele logits...
+
+\begin{table}[]
+\begin{tabular}{lrr}
+\hline
+\textbf{Probabiliteit} & \textbf{Odds}  & \textbf{Logits} \\ \hline
+0.10          & 0.11               & -2.20 \\
+0.30          & 0.43               & -0.85  \\
+0.50          & 1.00               & 0.00   \\
+0.70          & 2.33               & 0.85   \\
+0.90          & 9.00               & 2.20   \\ \hline
+\end{tabular}
+\end{table}
+
+\bigskip
+- Loopt van $-\infty$ tot $\infty$
+- $0$ is midden (=50% kans)
+- Symmetrisch!
+
+## Verhouding tussen probabiliteiten en logits
+
+\begincols
+  \begincol{.49\textwidth}
+
+```{r, out.height="50%", warning = F, message=F, error = F}
+set.seed(1975)
+Probabiliteiten <- seq(0.01,0.99, by=0.01)
+Logits <- log(Probabiliteiten/(1-Probabiliteiten))
+Dgraph <- data_frame(Probabiliteiten,Logits)
+ggplot(Dgraph,aes(Logits,Probabiliteiten)) + geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), colour=I("red"),
+    se = FALSE) 
+```
+
+  \endcol
+  \begincol{.49\textwidth}
+    \begin{itemize}
+     \item Elke toename van 1 logit is niet lineair gerelateerd aan toename in probabiliteiten!
+      \item Lineair model in logits gaat gepaard met non-lineair model in probabiliteiten
+    \end{itemize}
+  \endcol
+\endcols
+
+## Voorbeeld uit 'dagelijkse leven'
+
+\begincols
+  \begincol{.49\textwidth}
+  
+```{r, out.height="50%", echo=F,warning =F, error = F, message = F}
+set.seed(1975)
+
+Lichaamslengte <- c(rnorm( 300 , mean = 162 , sd = 6.2), rnorm( 300, mean = 184 , sd = 7))
+Prob_Jongen <- c(rep( 0 , 300) , rep ( 1 , 300))
+
+DataGender <- data_frame(Lichaamslengte,Prob_Jongen)
+
+
+DataGender$Predicted_logit_Jongen <- -72.717 + 0.422*DataGender$Lichaamslengte
+
+ggplot(DataGender,aes(Lichaamslengte,Predicted_logit_Jongen, ylab = 'Logit Jongen')) + geom_smooth(method = "lm", 
+     colour=I("red"),
+    se = FALSE) 
+```
+
+  \endcol
+  \begincol{.49\textwidth}
+    
+```{r,out.height="50%",warning =FALSE, message=F}
+
+DataGender$Predicted_prob_Jongen <- alog(DataGender$Predicted_logit_Jongen) 
+
+ggplot(DataGender,aes(Predicted_logit_Jongen,Predicted_prob_Jongen)) + geom_smooth(method = "glm", 
+    method.args = list(family = "binomial"), colour=I("red"),
+    se = FALSE) 
+
+```
+  \endcol
+\endcols
+
+##  Voorbeeld uit 'dagelijkse leven'
+
+Het statistisch model achter verband tussen lengte en kans dat het om een jongen gaat:
+$$ Logit(Jongen = 1 ) = -72.717 + 0.422*Lichaamslengte$$
+\bigskip
+waarbij   
+\textbf{-72.717} = \textit{intercept} (Voorspelde kans in logits dat het een jongen is als iemand 0 cm lang is)     
+\textbf{0.422} = \textit{slope} (Per cm dat een persoon langer is, neemt kans in logits dat het om een jongen gaat met 0.422 toe)
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model        
+(Intercept = -72.717, slope = 0.422)
+\medskip
+
+\begin{table}[]
+\begin{tabular}{lc}
+ \hline
+\textbf{Lengte}      & \textbf{Voorspelde logit} \\ \hline
+155                  &  -72.717 + 0.422*155 = -7.307\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+165                  &  -72.717 + 0.422*165 = -3.087\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+175                  &  -72.717 + 0.422*175 = 1.133\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+185                  &  -72.717 + 0.422*185 = 5.353\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+195                  &  -72.717 + 0.422*195 = 9.573 \\ \hline
+\end{tabular}
+\end{table}
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model        
+(Intercept = -72.717, slope = 0.422)
+\medskip
+
+\begin{table}[]
+\begin{tabular}{lc}
+ \hline
+\textbf{Lengte}      & \textbf{Voorspelde logit} \\ \hline
+155                  &  -72.717 + 0.422*155 = -7.307\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+165                  &  -72.717 + 0.422*165 = -3.087\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+175                  &  -72.717 + 0.422*175 = 1.133\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+185                  &  -72.717 + 0.422*185 = 5.353\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}   \\
+195                  &  -72.717 + 0.422*195 = 9.573 \\ \hline
+\end{tabular}
+\end{table}
+
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model in logits    
+(Intercept = -72.717, slope = 0.422)
+\medskip
+\begin{table}[]
+\begin{tabular}{lcr}
+ \hline
+\textbf{Lengte} & \textbf{Voorspelde logit}   & \textbf{$\Delta$Logit} \\ \hline
+155                  &  -7.307 &  \multicolumn{1}{l}{}\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          &    \textit{4.220}  \\
+165                  &  -3.087 & \multicolumn{1}{l}{}\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          &  \textit{4.220} \\
+175                  &  1.133 & \multicolumn{1}{l}{}\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          & \textit{4.220}\\
+185                  &  5.353 & \multicolumn{1}{l}{}\\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          & \textit{4.220}\\
+195                  &  9.573 & \multicolumn{1}{l}{} \\ \hline
+\end{tabular}
+\end{table}
+
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model in probabiliteiten     
+(Intercept = -72.717, slope = 0.422)
+\medskip
+\begin{table}[]
+\begin{tabular}{lcccr}
+ \hline
+\textbf{Lengte}      & \textbf{Voorspelde logit}    & \textbf{$\Delta$Logit} & \textbf{Voorspelde Prob.} & \textbf{$\Delta$Prob.} \\  \hline
+155                  &  -7.307 &  \multicolumn{1}{l}{} & 0.0007  & \multicolumn{1}{l}{}     \\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          &    \textit{4.220} & \multicolumn{1}{l}{} &  \textit{0.0429}\\
+165                  &  -3.087 & \multicolumn{1}{l}{} & 0.0436 & \multicolumn{1}{l}{}   \\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          &  \textit{4.220}   & \multicolumn{1}{l}{} & \textit{0.7128}\\
+175                  &  1.133 & \multicolumn{1}{l}{} &  0.7564 & \multicolumn{1}{l}{}  \\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          & \textit{4.220} & \multicolumn{1}{l}{} & \textit{0.2388}\\
+185                  &  5.353 & \multicolumn{1}{l}{} &  0.9952 & \multicolumn{1}{l}{}  \\
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{}          & \textit{4.220} & \multicolumn{1}{l}{} & \textit{0.0047} \\
+195                  &  9.573 & \multicolumn{1}{l}{} &  0.9999 & \multicolumn{1}{l}{}  \\ \hline
+\end{tabular}
+\end{table}
+
+# Logistische regressie in R
+
+##
+
+\textcolor{uarood}{Logistische regressie in R}
+
+## Functie glm( )
+
+Werkwijze zeer gelijkaardig aan lineaire regressieanalyse
+
+\smallskip
+
+Functie `glm( )`
+
+\bigskip
+
+```Model1 <- glm(Jongen ~ Lichaamslengte, data = DataGender, family = binomial())```
+
+\bigskip
+
+Vervolgens    
+`summary(Model1)`
+
+
+## Voorbeeld uit 'dagelijkse leven'
+
+Eerst maken we data aan om mee te werken:
+\medskip
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny", tidy="tidy"}
+set.seed(1975) # Maakt voorbeeld reproduceerbaar
+Lichaamslengte <- c(rnorm( 300 , mean = 162 , sd = 6.2), #Genereer 300 waarden met mean 162 en SD 6.2
+                    rnorm( 300, mean = 184 ,  sd = 7))   #Genereer 300 waarden met mean 184 en SD 7
+Jongen         <- c(rep( 0 , 300), rep ( 1 , 300))
+
+DataGender <- data_frame(Lichaamslengte, Jongen)
+```
+\bigskip
+Dan de analyse:
+\medskip
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny"}
+Model1 <- glm(Jongen ~ Lichaamslengte, data = DataGender, family = binomial())
+```
+
+## De output
+
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny", comment=""}
+summary(Model1)
+```
+
+## Welke kans ben je aan het voorspellen?
+
+
+\textbf{Kans dat het een jongen is of kans dat het een meisje is?}
+
+\bigskip
+Hier: dummy die aanstaat voor jongen!
+
+\bigskip
+Standaard: 
+\begin{itemize}
+\item Hoogste categorie (bv. waarde 1 bij een dummy)
+\item of laatste categorie alfabetisch (bv. categorie "Meisje" indien de variabele categorieën "Meisje" en "Jongen" heeft)
+\end{itemize}
+
+## De voorbeelddata
+
+We maken enkele varianten van de variabele geslacht.    
+Vervolgens herschatten we model met elke variant als afhankelijke variabele.
+\medskip
+
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny", comment = "", tidy="styler"}
+DataGender$Meisje   <- c(rep( 1 , 300) , rep ( 0 , 300))
+DataGender$Geslacht <- as.factor(c(rep( "Meisje" , 300) , rep ( "Jongen" , 300)))
+
+M1_Meisje   <- glm(Meisje ~ Lichaamslengte,   data = DataGender, family = binomial())
+M1_Geslacht <- glm(Geslacht ~ Lichaamslengte, data = DataGender, family = binomial())
+
+coefficients(Model1)
+
+coefficients(M1_Meisje)
+
+coefficients(M1_Geslacht)
+
+```
+
+## Veranderen van referentiecategorie
+
+De functie `relevel( )`
+\medskip
+
+```{r, echo = T, warning = F, message = F, error = F, size = "tiny", comment="", tidy="tidy"}
+DataGender$Geslacht_x <- relevel(DataGender$Geslacht, 2)
+M1_Geslacht_x         <- glm(Geslacht_x ~ Lichaamslengte, data = DataGender, family = binomial())
+summary(M1_Geslacht_x)
+```
+
+## Onderpresteerders - meerdere voorspellers
+
+Effect van 'Gender' en 'Ouders_GraagLezenZ' op kans op onderpresteren
+\medskip
+
+```{r, echo = T, message = F, comment="", warning = F, error = F, size = "tiny", tidy="tidy"}
+M1_PIRLS <- glm(Onderpresteren ~ Gender + Ouders_GraagLezenZ, 
+                data = Vlaanderen_1_2_3, family = binomial())
+summary(M1_PIRLS)
+```
+
+## alog( ) functie - PIRLS voorbeeld
+
+Voor interpretatie handiger om in probabiliteiten te spreken
+\medskip
+$$P(x = 1) = \frac{e^{logit(x=1)}}{1+e^{logit(x=1)}}$$
+\bigskip
+Bv. Kans op onderpresteren voor een jongen is -1.376 logits (~ intercept)    
+\bigskip
+In R
+```{r, echo = T, size = "tiny", comment=""}
+exp(-1.376)/(1+exp(-1.376))
+```
+\medskip
+
+Handiger: functie `alog( )` uit "OLP2 Functies.R"
+```{r, echo = T, size = "tiny", comment=""}
+alog(-1.376)
+```
+
+## alog( ) functie - PIRLS voorbeeld
+
+```{r, echo = T, size = "tiny", comment=""}
+# Probabiliteit tot onderpresteren voor jongens:
+alog(-1.376)
+
+# Probabiliteit tot onderpresteren voor meisjes:
+alog(-1.376 - 0.254)
+
+# Verschil in probabiliteit tot onderpresteren tussen jongens en meisjes:
+alog(-1.376) - alog(-1.376 - 0.254)
+```
+
+## alog( ) functie - PIRLS voorbeeld
+
+Bij kwantitatieve voorspellers (bv. Ouders_GraagLezenZ) fictieve respondenten als voorbeeld hanteren:
+\medskip
+```{r, echo = T, size = "tiny", comment=""}
+# Probabiliteit tot onderpresteren voor een jongen die gemiddeld scoort:
+alog(-1.376)
+
+# Probabiliteit tot onderpresteren voor een jongen die 2 st.dev. hoger dan gemiddeld scoort:
+alog(-1.376 + 2 * -0.394)
+
+# Probabiliteit tot onderpresteren voor een jongen die 2 st.dev. lager dan gemiddeld scoort:
+alog(-1.376 - 2 * -0.394)
+
+```
+
+
+## Grafisch samenvatten van model
+
+Functie `plot_model` uit het pakket `sjPlot`(\textbf{niet in OLP!})
+
+```{r, echo = T, out.height = "70%", warning = F, message = F, error = F, size = "tiny", tidy="tidy"}
+library(sjPlot)
+plot_model(M1_PIRLS, transform = NULL, type = "eff", terms = c("Ouders_GraagLezenZ"))
+```
+
+## Grafisch samenvatten van model
+
+```{r, echo = T, out.height = "70%", warning = F, message = F, error = F, size = "tiny", tidy="styler"}
+plot_model(M1_PIRLS, transform = NULL, type = "eff", terms = c("Ouders_GraagLezenZ","Gender"))
+```
+
+## Interactie-effecten - PIRLS voorbeeld
+
+Interactie-effect van 'Gender' en 'Ouders_GraagLezenZ' op kans op onderpresteren?
+
+```{r, echo = T, message = F, warning = F, comment="", error = F, size = "tiny", tidy="tidy"}
+M2_PIRLS <- glm(Onderpresteren ~ Gender + Ouders_GraagLezenZ + Gender*Ouders_GraagLezenZ, 
+                data = Vlaanderen_1_2_3, family = binomial())
+summary(M2_PIRLS)
+```
+
+## Grafisch samenvatten van model
+
+```{r, echo = T, out.height = "70%", warning = F, message = F, error = F, size = "tiny", tidy="tidy"}
+plot_model(M2_PIRLS, transform = NULL, type = "eff", terms = c("Ouders_GraagLezenZ","Gender"))
+```
+
+##
+\textcolor{uarood}{time to pRactice}
+
+
+## Peerfeedback
+\begin{center}
+\includegraphics[width=0.75\textwidth]{Peerfeedback.png}  
+\end{center}
+
+\medskip
+\textbf{Welke paper is beter?}: 
+
+> Het methodologieluik van de paper bevat alle informatie nodig om het resultatenluik te kunnen volgen (bv. 
+> beschrijving variabelen, analyse-aanpak inc. gehanteerde vuistregels). In het resultatenluik worden de
+> resultaten op een duidelijke, overzichtelijke en gerichte manier beschreven. Deze beschrijving wordt
+> ondersteund d.m.v. tabellen en/of figuren. Beide delen van de paper vormen één geheel.
+
+## ExtRa's
+Zit je te popelen om te weten ...
+
+- hoe je toch random slopes voor kwalitatieve variabelen kan plotten zonder foutmelding?
+- hoe je multilevel analyse gebruikt om longitudinale analyses te doen?
+
+\bigskip
+
+Check Blackboard (Leermateriaal > Materiaal per week)
+
+## Oefenen pRaktisch
+
+\textbf{Oefeningen en respons} terug te vinden op BB
+\medskip
+
+\textbf{Instructies}: 
+
+- Laat deze sessie open staan
+- Open Blackboard opnieuw in een ander venster
+- Ga naar de curusus GKN
+- Ga naar de Blackboard Collaborate omgeving van je groep
+- Zet je microfoon/video aan
+
+Eén van ons maakt zo meteen een ronde langs de groepen! 
+

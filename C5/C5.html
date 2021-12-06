@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GKN 2021-2022: C4</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+&lt;style&gt;
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.right-column{
+  padding-top: 0;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 75%;
+                                  }
+
+
+&lt;/style&gt;
+
+
+&lt;div class="my-logo-left"&gt; &lt;img src="img/UA-eng-hor-1-RGB.jpg" width="90%"/&gt; &lt;/div&gt;
+
+
+# GKN - Contactmoment 5
+.font160[
+.SW-greenD[Logistische regressieanalyses (Deel 1)] 
+]
+Sven De Maeyer &amp; Bea Mertens
+
+.font80[
+.UA-red[
+09/12/2021
+]
+]
+
+---
+class: inverse-green, center, middle
+
+# Categorische afhankelijke variabelen
+
+---
+## Categorische afhankelijke variabelen
+
+&lt;br&gt;
+
+&lt;img src="Fig/to_be_or_not_to_be.jpg" width="30%" height="30%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Categorische afhankelijke variabelen
+
+Enkele klassiekers:
+
+- Al dan niet slagen;
+- Al dan niet doorstromen;
+- Al dan niet falen;
+- Al dan niet nieuwe job;
+- Al dan niet norm halen;
+- ...     
+&lt;br&gt;    
+
+Maar soms ook handig bij numerieke variabelen ...
+
+---
+## Categorische afhankelijke variabelen
+
+Variabelen met meerdere categorieën zijn herleidbaar tot een reeks van .SW-greenD[**dummyvariabelen**]
+
+&lt;br&gt;
+
+Voor elke categorie kan je een variabele maken die aangeeft of een respondent al dan niet tot die categorie behoort
+
+---
+## Vb. Onderpresteerders... in PIRLS
+
+Leesvaardigheid van Vlaamse lln. in 5 categorieën ingedeeld (variabele `ASRIBM01`):
+
+1. BELOW 400                     (code 1)
+2. AT OR ABOVE 400 BUT BELOW 475 (code 2)
+3. AT OR ABOVE 475 BUT BELOW 550 (code 3)
+4. AT OR ABOVE 550 BUT BELOW 625 (code 4)
+5. AT OR ABOVE 625               (code 5)
+
+&lt;br&gt;
+
+Code 1 en 2 samen vormen een groep van onderpresterende leerlingen
+
+
+```r
+table(Vlaanderen_1_2_3$ASRIBM01)
+```
+
+```
+
+   1    2    3    4    5 
+ 135  917 2329 1613  204 
+```
+
+---
+## Onderpresteerders - afhankelijke var. hercoderen
+
+Eerst **hercoderen**... 
+
+&lt;br&gt;
+
+&gt; Dummyvariabele maken die aanstaat voor 'Onderpresteren' (dus voor leerlingen met code 1 of 2 voor de variabele `ASRIBM01`)
+
+&lt;br&gt;
+
+
+```r
+library(car)
+Vlaanderen_1_2_3$Onderpresteren &lt;- recode(Vlaanderen_1_2_3$ASRIBM01, "1=1;2=1;3=0;4=0;5=0")
+table(Vlaanderen_1_2_3$ASRIBM01, Vlaanderen_1_2_3$Onderpresteren)
+```
+
+```
+   
+       0    1
+  1    0  135
+  2    0  917
+  3 2329    0
+  4 1613    0
+  5  204    0
+```
+
+---
+## Onderpresteerders - voorspeller? 
+
+&gt; .SW-greenD[*Is het zo dat jongens een grotere kans hebben om onder te presteren dan meisjes?*]
+
+&lt;br&gt;
+
+
+```r
+Vlaanderen_1_2_3$Gender &lt;- recode(Vlaanderen_1_2_3$ASBG01, "1 = 'Girls'; 2 = 'Boys'")
+kruistabel.kolom(Vlaanderen_1_2_3$Onderpresteren, Vlaanderen_1_2_3$Gender)
+```
+
+```
+     x
+y          Boys     Girls       Sum
+  0    77.57266  82.04833  79.83699
+  1    22.42734  17.95167  20.16301
+  Sum 100.00000 100.00000 100.00000
+```
+
+---
+## Onderpresteerders - kansen! (1)
+
+**Wat is de kans op ....?**
+
+1. onderpresteren?    
+2. onderpresteren voor jongens?    
+3. onderpresteren voor meisjes?    
+4. onderpresteren voor meisjes - onderpresteren voor jongens?
+
+&lt;br&gt;
+
+
+```
+     x
+y          Boys     Girls       Sum
+  0    77.57266  82.04833  79.83699
+  1    22.42734  17.95167  20.16301
+  Sum 100.00000 100.00000 100.00000
+```
+
+---
+## Onderpresteerders - kansen! (2)
+
+**Wat is de kans op....?**
+
+`\(P(Onderpr.) = .202\)`
+
+`\(P(Onderpr.|Boys) = .224\)`
+
+`\(P(Onderpr.|Girls) = .180\)`
+
+`\(P(Onderpr.|Girls) - P(Onderpr.|Boys) = .180 - .224 = -.044\)`
+
+---
+## Dummy als afhankelijke variabele? (1)
+
+.UA-red[**Waarom niet gewoon dummy als afhankelijke variabele?**]
+
+
+
+```r
+Model_Dummy &lt;- lm(Onderpresteren ~ Gender, data = Vlaanderen_1_2_3)
+summary(Model_Dummy)
+```
+
+```
+
+Call:
+lm(formula = Onderpresteren ~ Gender, data = Vlaanderen_1_2_3)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.2243 -0.2243 -0.1795 -0.1795  0.8205 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.224273   0.007941  28.244  &lt; 2e-16 ***
+GenderGirls -0.044757   0.011164  -4.009 6.18e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4007 on 5151 degrees of freedom
+  (45 observations deleted due to missingness)
+Multiple R-squared:  0.003111,	Adjusted R-squared:  0.002917 
+F-statistic: 16.07 on 1 and 5151 DF,  p-value: 6.183e-05
+```
+
+---
+
+## Dummy als afhankelijke variabele? (2)
+
+.SW-greenD[**Kans op onderpresteren voor een meisje?**]
+
+
+```
+
+Call:
+lm(formula = Onderpresteren ~ Gender, data = Vlaanderen_1_2_3)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.2243 -0.2243 -0.1795 -0.1795  0.8205 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.224273   0.007941  28.244  &lt; 2e-16 ***
+GenderGirls -0.044757   0.011164  -4.009 6.18e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4007 on 5151 degrees of freedom
+  (45 observations deleted due to missingness)
+Multiple R-squared:  0.003111,	Adjusted R-squared:  0.002917 
+F-statistic: 16.07 on 1 and 5151 DF,  p-value: 6.183e-05
+```
+
+---
+
+## Dummy als afhankelijke variabele? (3)
+
+.SW-greenD[**Kans op onderpresteren voor een leerling wiens ouders 3 SD hoger dan gemiddeld scoren op Ouders_GraagLezenZ?**]
+.footnotesize[
+
+```r
+Vlaanderen_1_2_3$Ouders_GraagLezenZ &lt;- scale(Vlaanderen_1_2_3$ASBHPLR)
+Model_Dummy2 &lt;- lm(Onderpresteren ~ Ouders_GraagLezenZ, data = Vlaanderen_1_2_3)
+summary(Model_Dummy2)
+```
+
+```
+
+Call:
+lm(formula = Onderpresteren ~ Ouders_GraagLezenZ, data = Vlaanderen_1_2_3)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.39762 -0.21144 -0.17131 -0.09858  0.95232 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         0.189537   0.005672   33.42   &lt;2e-16 ***
+Ouders_GraagLezenZ -0.060328   0.005672  -10.63   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3873 on 4662 degrees of freedom
+  (534 observations deleted due to missingness)
+Multiple R-squared:  0.02369,	Adjusted R-squared:  0.02348 
+F-statistic: 113.1 on 1 and 4662 DF,  p-value: &lt; 2.2e-16
+```
+]
+---
+
+## Dummy als afhankelijke variabele? (4)
+
+.pull-left[
+.footnotesize[
+
+```r
+library(ggplot2)
+
+Ouders_GraagLezenZ &lt;- seq(-4 , 4 , .05)
+
+Pred_prob_Onderpresteren &lt;- 0.189537 + (-0.060328 * Ouders_GraagLezenZ)
+
+Onzin &lt;- car::recode(
+  Pred_prob_Onderpresteren,
+  ' -2:-0.0000001 = "Onzin"; 0.0000001:1 = "Geen onzin" '
+  )
+
+Onzin &lt;- relevel(as.factor(Onzin), "Onzin")
+
+qplot(x = Ouders_GraagLezenZ,
+      y = Pred_prob_Onderpresteren,
+      colour = Onzin) + 
+  geom_hline(yintercept = 0)
+```
+]
+]
+
+.pull-right[
+&lt;img src="C5_files/figure-html/unnamed-chunk-12-1.png" width="504" /&gt;
+]
+
+---
+
+## Problemen met dummyvariabelen als afhankelijke variabele
+
+Probabiliteiten zijn gelimiteerd tussen 0 en 1
+
+&lt;br&gt;
+
+`\(\rightarrow\)`  Regressielijn kan onmogelijke waarden bevatten
+
+`\(\rightarrow\)`  Kan leiden tot onzinnige schattingen
+
+`\(\rightarrow\)`  Hoe meer 'gemiddelde kans' afwijkt van 50%, hoe groter kans op onzinnige schattingen
+
+---
+class: inverse-green, center, middle
+
+# Non-lineariteit
+
+---
+## Lineaire regressie is hier problematisch!
+
+
+.pull-left[
+
+
+```r
+X &lt;- c(rnorm( 40 , mean = -1 , sd = 1), 
+       rnorm( 40, mean = 1 , sd = 1))
+Y &lt;- c(rep( 0 , 40), 
+       rep ( 1 , 40))
+
+qplot(
+  x = X,
+  y = Y, 
+  ylab = 'Probabiliteit', 
+  ylim = c(-0.25,1.25)) + 
+ geom_abline(slope = 0.25, 
+             intercept = 0.50, 
+             col="red")
+```
+]
+
+.pull-right[
+
+&lt;img src="C5_files/figure-html/unnamed-chunk-14-1.png" width="288" /&gt;
+
+*We krijgen aan de uiteinden problemen met onrealistische schattingen... *
+]
+---
+## Oplossing 1
+
+
+&lt;img src="C5_files/figure-html/unnamed-chunk-15-1.png" width="288" /&gt;
+
+
+Dit model is .UA-red[DETERMINISTISCH]: vanaf een bepaalde waarde voor X is de kans gelijk aan 0% of 100%!
+
+
+---
+## Oplossing 2
+
+
+&lt;img src="C5_files/figure-html/unnamed-chunk-16-1.png" width="288" /&gt;
+
+Dit model is 
+
+- .UA-red[REALISTISCHER]: Vanaf een bepaalde waarde voor X benadert de kans 0% of 100%, maar is nooit exact 0% of 100%!
+
+- .UA-red[NIET-LINEAIR]: Kansen nemen niet lineair toe of af overheen de schaal van X
+
+---
+
+## Voorbeelden uit het 'dagelijkse leven' (1)
+
+
+  
+&lt;img src="C5_files/figure-html/unnamed-chunk-17-1.png" width="288" /&gt;
+
+
+- Kans om een eigen huis te bezitten is hoger voor gezinnen met hoger inkomen
+
+- Toch ook gezinnen met hoog inkomen die geen eigen huis bezitten en vice versa
+
+- 200€ meer verdienen heeft geen gelijkaardige impact (tussen 1500€ en 2500€ is de impact het sterkst)
+
+---
+
+## Voorbeelden uit het 'dagelijkse leven' (2a)
+
+
+  
+&lt;img src="C5_files/figure-html/unnamed-chunk-18-1.png" width="288" /&gt;
+
+
+- Hoe groter lichaamslengte, hoe kleiner de kans dat het een meisje is
+
+- Toch ook grote meisjes en kleine jongens
+
+- 1cm groter of kleiner zijn heeft geen gelijkaardige impact
+
+---
+
+## Voorbeelden uit het 'dagelijkse leven' (2b)
+
+
+&lt;img src="C5_files/figure-html/unnamed-chunk-19-1.png" width="288" /&gt;
+
+- Net hetzelfde model kan 'gespiegeld' worden!
+---
+class: inverse-green, center, middle
+# Logits
+
+---
+## Let's talk in LOGITS...
+
+&lt;img src="Fig/Probability.jpg" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Kansen op een andere schaal uitgedrukt
+
+.SW-greenD[.Large[.center2[
+Probabiliteiten `\(\rightarrow\)` Odds `\(\rightarrow\)` Logits
+]
+]
+]
+---
+
+## Odds
+
+De .UA-red[Odds] voor een 'event' is:
+
+$$
+Odds(Y = 1) = \frac{P(Y = 1)}{1-P(Y = 1)} = \frac{P(Y = 1)}{P(Y \ne 1)}
+$$
+
+---
+
+## Odds - voorbeeld onderpresteren
+
+Kans op onderpresteren is 0.25 keer groter dan de kans op niet onderpresteren    
+
+Kans op onderpresteren is 1/0.25 keer kleiner dan kans op niet onderpresteren    
+
+&lt;br&gt;
+
+$$
+Odds(Onderpr. = 1) = \frac{P(Onderpr. = 1)}{1-P(Onderpr. = 1)} =  \frac{0.202}{0.798}=0.253
+$$
+&lt;br&gt;
+
+Kans op niet onderpresteren is 4 keer groter dan kans op onderpresteren    
+
+Kans op niet onderpresteren is 1/4 keer kleiner dan kans op onderpresteren    
+
+&lt;br&gt;
+
+$$
+Odds(Onderpr. = 0) = \frac{P(Onderpr. = 0)}{1-P(Onderpr. = 0)} =  \frac{0.798}{0.202}=3.95
+$$
+
+---
+
+## Enkele odds...
+
+|Probabiliteit |Odds
+|:--------------|:------------------|
+| 0.10          | (= 0.1/0.9) = 0.11 | 
+| 0.30          | 0.43               | 
+| 0.50          | 1.00               | 
+| 0.70          | 2.33               | 
+| 0.90           |9.00               |
+
+&lt;br&gt;
+Loopt van `\(0\)` tot `\(\infty\)`
+
+---
+
+## Odds zijn echter niet superhandig
+
+- Nog steeds een nulwaarde
+
+- Niet symmetrisch
+
+- Dus niet handig voor lineaire modellen...
+
+---
+
+## Tijd voor logits
+
+.UA-red[Logit] is het natuurlijk logaritme van een Odds:
+
+$$
+Logits(Onderpr. = 1) = \ln(Odds) = \ln(0.253) = -1.347
+$$
+
+---
+
+## Uitstapje naar ... logaritmes
+
+$$\log_a(x) \rightarrow  a^? = x $$
+
+$$\log_{10}(10) \rightarrow 10^?=10 \rightarrow 10^1=10  $$
+
+$$\log_{10}(1) \rightarrow 10^?=1 \rightarrow 10^0=1  $$
+
+$$\log_{10}(100) \rightarrow 10^?=100 \rightarrow 10^2=100  $$
+
+
+---
+
+## Natuurlijk logaritme
+
+$$\ln(x) = \log_e(x) \rightarrow  e^? = x $$
+
+met:
+
+`$$e=2,718281828$$`
+
+$$\ln(1) \rightarrow e^?=1 \rightarrow e^0=1  $$ 
+
+$$\ln(10) \rightarrow e^?=10 \rightarrow e^{2.303}=10  $$
+
+---
+
+## Enkele logits...
+
+|Probabiliteit  |Odds   | Logits |
+|:--------------|:------|:-------|
+| 0.10          | 0.11  | -2.20 |
+| 0.30          | 0.43  | -0.85 |
+| 0.50          | 1.00  | 0.00  |
+| 0.70          | 2.33  | 0.85  |
+| 0.90           |9.00  | 2.20  | 
+
+&lt;br&gt;
+- Loopt van `\(-\infty\)` tot `\(\infty\)`
+
+- `\(0\)` is midden (=50% kans)
+
+- Symmetrisch!
+
+---
+
+## Verhouding tussen probabiliteiten en logits
+
+.pull-left[
+&lt;img src="C5_files/figure-html/unnamed-chunk-21-1.png" width="360" /&gt;
+]
+.pull-right[
+- Elke toename van 1 logit is niet lineair gerelateerd aan toename in probabiliteiten!
+
+- Lineair model in logits gaat gepaard met non-lineair model in probabiliteiten
+]
+
+---
+
+## Voorbeeld uit 'dagelijkse leven'
+
+
+.pull-left[
+&lt;img src="C5_files/figure-html/unnamed-chunk-22-1.png" width="360" /&gt;
+]
+.pull-right[
+&lt;img src="C5_files/figure-html/unnamed-chunk-23-1.png" width="360" /&gt;
+]
+---
+
+##  Voorbeeld uit 'dagelijkse leven'
+
+Het statistisch model achter het verband tussen lengte en kans dat het om een jongen gaat:
+
+$$ Logit(Jongen = 1 ) = -72.717 + 0.422*Lichaamslengte$$
+&lt;br&gt;
+waarbij   
+
+.UA-red[-72.717] = intercept = Voorspelde **kans in logits** dat het een jongen is als iemand 0 cm lang is     
+.UA-red[0.422] = slope = Per cm dat een persoon langer is, neemt **kans in logits** dat het om een jongen gaat met 0.422 logits toe
+
+---
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model        
+
+$$ Logit(Jongen = 1 ) = -72.717 + 0.422*Lichaamslengte$$
+
+| Lengte | Voorspelde logit Jongen      |
+|:-------|:-----------------------------|
+| 155    |  -72.717 + 0.422*155 = -7.307|
+|        |                              |
+| 165    |  -72.717 + 0.422*165 = -3.087|
+|        |                              |
+| 175    |  -72.717 + 0.422*175 = 1.133 |
+|        |                              |
+| 185    |  -72.717 + 0.422*185 = 5.353 |
+|        |                              |
+| 195    |  -72.717 + 0.422*195 = 9.573 |
+
+---
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model in logits    
+
+$$ Logit(Jongen = 1 ) = -72.717 + 0.422*Lichaamslengte$$
+
+| Lengte | Voorspelde logit Jongen      | `\(\Delta\)` Logit |
+|:-------|:-----------------------------|:---------------|
+| 155    |  -72.717 + 0.422*155 = -7.307|                |
+|        |                              |  4.22          |
+| 165    |  -72.717 + 0.422*165 = -3.087|                |
+|        |                              |  4.22          |
+| 175    |  -72.717 + 0.422*175 = 1.133 |                |
+|        |                              |  4.22          |
+| 185    |  -72.717 + 0.422*185 = 5.353 |                |
+|        |                              |  4.22          |
+| 195    |  -72.717 + 0.422*195 = 9.573 |                |
+
+
+
+---
+
+## Voorbeeld uit 'dagelijkse leven'
+
+5 fictieve personen + wat voorspelt ons model in probabiliteiten    
+
+$$ Logit(Jongen = 1 ) = -72.717 + 0.422*Lichaamslengte$$
+
+| Lengte | Voorspelde logit Jongen      | `\(\Delta\)` Logit | Voorspelde Prob. Jongen | `\(\Delta\)` Prob. |
+|:-------|:-----------------------------|:---------------|:------------------------|:---------------|
+| 155    |  -72.717 + 0.422*155 = -7.307|                | 0.0007                  |                |
+|        |                              |  4.22          |                         |  0.0429        |
+| 165    |  -72.717 + 0.422*165 = -3.087|                | 0.0436                  |                |
+|        |                              |  4.22          |                         | 0.7128         |
+| 175    |  -72.717 + 0.422*175 = 1.133 |                | 0.7564                  |                |
+|        |                              |  4.22          |                         | 0.2388         |
+| 185    |  -72.717 + 0.422*185 = 5.353 |                | 0.9952                  |                |
+|        |                              |  4.22          |                         | 0.0047         |
+| 195    |  -72.717 + 0.422*195 = 9.573 |                | 0.9999                  |                |
+
+
+---
+class: inverse-green, center, middle
+
+# Logistische regressie in R
+
+---
+## Functie .UA-red[`glm( )`]
+
+Werkwijze zeer gelijkaardig aan lineaire regressieanalyse
+
+&lt;br&gt;
+
+Functie `glm( )`
+
+`Model1 &lt;- glm(Jongen ~ Lichaamslengte, data = DataGender, family = binomial())`
+
+&lt;br&gt;
+
+Vervolgens    
+
+`summary(Model1)`
+
+---
+
+## Voorbeeld uit 'dagelijkse leven'
+
+Eerst maken we data aan om mee te werken:
+
+.footnotesize[
+
+```r
+set.seed(1975) # Maakt voorbeeld reproduceerbaar
+Lichaamslengte &lt;- c(rnorm( 300 , mean = 162 , sd = 6.2), #Genereer 300 waarden met mean 162 en SD 6.2
+                    rnorm( 300, mean = 184 ,  sd = 7))   #Genereer 300 waarden met mean 184 en SD 7
+Jongen         &lt;- c(rep( 0 , 300), rep ( 1 , 300))
+
+DataGender &lt;- data_frame(Lichaamslengte, Jongen)
+```
+]
+
+&lt;br&gt;
+Dan de analyse:
+
+
+```r
+Model1 &lt;- glm(Jongen ~ Lichaamslengte, data = DataGender, family = binomial())
+```
+
+---
+## De output
+
+.footnotesize[
+
+```r
+summary(Model1)
+```
+
+```
+
+Call:
+glm(formula = Jongen ~ Lichaamslengte, family = binomial(), data = DataGender)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.5329  -0.1701  -0.0030   0.1110   4.0325  
+
+Coefficients:
+                Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)    -72.71668    6.93641  -10.48   &lt;2e-16 ***
+Lichaamslengte   0.42193    0.04031   10.47   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 831.78  on 599  degrees of freedom
+Residual deviance: 188.99  on 598  degrees of freedom
+AIC: 192.99
+
+Number of Fisher Scoring iterations: 7
+```
+]
+
+---
+## Welke kans ben je aan het voorspellen?
+
+.SW-greenD[*Kans dat het een jongen is of kans dat het een meisje is?*]
+
+&lt;br&gt;
+
+Hier: dummy die aanstaat voor jongen!
+
+&lt;br&gt;
+Standaard: 
+
+- Hoogste categorie (bv. waarde 1 bij een dummy)
+
+- of laatste categorie alfabetisch (bv. categorie "Meisje" indien de variabele categorieën "Meisje" en "Jongen" heeft)
+
+---
+## De voorbeelddata
+
+We maken enkele varianten van de variabele geslacht.    
+Vervolgens herschatten we model met elke variant als afhankelijke variabele.
+
+
+
+```r
+DataGender$Meisje &lt;- c(rep(1, 300), rep(0, 300))
+DataGender$Geslacht &lt;- as.factor(c(rep("Meisje", 300), rep("Jongen", 300)))
+
+M1_Meisje &lt;- glm(Meisje ~ Lichaamslengte, data = DataGender, family = binomial())
+M1_Geslacht &lt;- glm(Geslacht ~ Lichaamslengte, data = DataGender, family = binomial())
+
+coefficients(Model1)
+```
+
+```
+   (Intercept) Lichaamslengte 
+   -72.7166813      0.4219255 
+```
+
+```r
+coefficients(M1_Meisje)
+```
+
+```
+   (Intercept) Lichaamslengte 
+    72.7166813     -0.4219255 
+```
+
+```r
+coefficients(M1_Geslacht)
+```
+
+```
+   (Intercept) Lichaamslengte 
+    72.7166813     -0.4219255 
+```
+
+---
+## Veranderen van referentiecategorie
+
+De functie .UA-red[`relevel( )`]
+
+.footnotesize[
+
+```r
+DataGender$Geslacht_x &lt;- relevel(DataGender$Geslacht, 2)
+M1_Geslacht_x         &lt;- glm(Geslacht_x ~ Lichaamslengte, data = DataGender, family = binomial())
+summary(M1_Geslacht_x)
+```
+
+```
+
+Call:
+glm(formula = Geslacht_x ~ Lichaamslengte, family = binomial(), 
+    data = DataGender)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.5329  -0.1701  -0.0030   0.1110   4.0325  
+
+Coefficients:
+                Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)    -72.71668    6.93641  -10.48   &lt;2e-16 ***
+Lichaamslengte   0.42193    0.04031   10.47   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 831.78  on 599  degrees of freedom
+Residual deviance: 188.99  on 598  degrees of freedom
+AIC: 192.99
+
+Number of Fisher Scoring iterations: 7
+```
+]
+---
+## Onderpresteerders - meerdere voorspellers
+
+Effect van 'Gender' en 'Ouders_GraagLezenZ' op kans op onderpresteren ?
+
+.footnotesize[
+
+```r
+M1_PIRLS &lt;- glm(Onderpresteren ~ Gender + Ouders_GraagLezenZ, 
+                data = Vlaanderen_1_2_3, family = binomial())
+summary(M1_PIRLS)
+```
+
+```
+
+Call:
+glm(formula = Onderpresteren ~ Gender + Ouders_GraagLezenZ, family = binomial(), 
+    data = Vlaanderen_1_2_3)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.1701  -0.6869  -0.5991  -0.4531   2.2943  
+
+Coefficients:
+                   Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)        -1.37641    0.05319  -25.88  &lt; 2e-16 ***
+GenderGirls        -0.25424    0.07611   -3.34 0.000836 ***
+Ouders_GraagLezenZ -0.39405    0.03856  -10.22  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 4496.7  on 4634  degrees of freedom
+Residual deviance: 4377.4  on 4632  degrees of freedom
+  (563 observations deleted due to missingness)
+AIC: 4383.4
+
+Number of Fisher Scoring iterations: 4
+```
+]
+
+---
+## .UA-red[`alog( )`] functie - PIRLS voorbeeld
+
+Voor interpretatie handiger om in probabiliteiten te spreken
+
+`$$P(x = 1) = \frac{e^{logit(x=1)}}{1+e^{logit(x=1)}}$$`
+&lt;br&gt;
+Bv. Kans op onderpresteren voor een jongen is -1.376 logits (~ intercept)    
+&lt;br&gt;
+In `R`
+
+```r
+exp(-1.376)/(1+exp(-1.376))
+```
+
+```
+[1] 0.2016522
+```
+
+
+Handiger: functie `alog( )` uit "OLP2 Functies.R"
+
+```r
+alog(-1.376)
+```
+
+```
+[1] 0.2016522
+```
+
+---
+
+## .UA-red[`alog( )`] functie - PIRLS voorbeeld
+
+
+```r
+# Probabiliteit tot onderpresteren voor jongens:
+alog(-1.376)
+```
+
+```
+[1] 0.2016522
+```
+
+```r
+# Probabiliteit tot onderpresteren voor meisjes:
+alog(-1.376 - 0.254)
+```
+
+```
+[1] 0.1638304
+```
+
+```r
+# Verschil in probabiliteit tot onderpresteren tussen jongens en meisjes:
+alog(-1.376) - alog(-1.376 - 0.254)
+```
+
+```
+[1] 0.03782182
+```
+
+---
+
+## .UA-red[`alog( )`] functie - PIRLS voorbeeld
+
+Bij kwantitatieve voorspellers (bv. Ouders_GraagLezenZ) fictieve respondenten als voorbeeld hanteren:
+
+
+
+```r
+# Probabiliteit tot onderpresteren voor een jongen die gemiddeld scoort:
+alog(-1.376)
+```
+
+```
+[1] 0.2016522
+```
+
+```r
+# Probabiliteit tot onderpresteren voor een jongen die 2 st.dev. hoger dan gemiddeld scoort:
+alog(-1.376 + 2 * -0.394)
+```
+
+```
+[1] 0.1030302
+```
+
+```r
+# Probabiliteit tot onderpresteren voor een jongen die 2 st.dev. lager dan gemiddeld scoort:
+alog(-1.376 - 2 * -0.394)
+```
+
+```
+[1] 0.3570939
+```
+
+---
+
+## Grafisch samenvatten van model
+
+Functie .UA-red[`plot_model()`] uit het pakket .UA-red[`sjPlot`] (*niet in OLP!*)
+
+.pull-left[
+
+```r
+library(sjPlot)
+
+plot_model(M1_PIRLS, 
+           transform = NULL, 
+           type = "eff", 
+           terms = c("Ouders_GraagLezenZ")
+           )
+```
+]
+
+.pull-right[
+&lt;img src="C5_files/figure-html/unnamed-chunk-35-1.png" width="360" /&gt;
+]
+---
+
+## Grafisch samenvatten van model
+
+.pull-left[
+
+```r
+library(sjPlot)
+
+plot_model(M1_PIRLS, 
+           transform = NULL, 
+           type = "eff", 
+           terms = c("Ouders_GraagLezenZ", "Gender")
+           )
+```
+]
+
+.pull-right[
+&lt;img src="C5_files/figure-html/unnamed-chunk-37-1.png" width="360" /&gt;
+]
+
+---
+
+## Interactie-effecten - PIRLS voorbeeld
+
+Interactie-effect van 'Gender' en 'Ouders_GraagLezenZ' op kans op onderpresteren?
+.footnotesize[
+
+```r
+M2_PIRLS &lt;- glm(Onderpresteren ~ Gender + Ouders_GraagLezenZ + Gender*Ouders_GraagLezenZ, 
+                data = Vlaanderen_1_2_3, family = binomial())
+summary(M2_PIRLS)
+```
+
+```
+
+Call:
+glm(formula = Onderpresteren ~ Gender + Ouders_GraagLezenZ + 
+    Gender * Ouders_GraagLezenZ, family = binomial(), data = Vlaanderen_1_2_3)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.1653  -0.6870  -0.5989  -0.4517   2.2982  
+
+Coefficients:
+                                Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                    -1.375627   0.053804 -25.567  &lt; 2e-16 ***
+GenderGirls                    -0.255926   0.078173  -3.274  0.00106 ** 
+Ouders_GraagLezenZ             -0.390525   0.053658  -7.278 3.39e-13 ***
+GenderGirls:Ouders_GraagLezenZ -0.007286   0.077165  -0.094  0.92477    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 4496.7  on 4634  degrees of freedom
+Residual deviance: 4377.4  on 4631  degrees of freedom
+  (563 observations deleted due to missingness)
+AIC: 4385.4
+
+Number of Fisher Scoring iterations: 4
+```
+]
+---
+
+## Grafisch samenvatten van model
+
+.pull-left[
+
+```r
+library(sjPlot)
+
+plot_model(M2_PIRLS, 
+           transform = NULL, 
+           type = "eff", 
+           terms = c("Ouders_GraagLezenZ", "Gender")
+           )
+```
+]
+
+.pull-right[
+&lt;img src="C5_files/figure-html/unnamed-chunk-40-1.png" width="360" /&gt;
+]
+
+
+---
+class: inverse-red, middle, center
+
+# Time to pRactice!
+
+&lt;p align = "left"&gt;
+Instructies: 
+&lt;br&gt;
+- Laat deze sessie open staan
+&lt;br&gt;
+- Open Blackboard opnieuw in een ander venster
+&lt;br&gt;
+- Ga naar de curusus GKN
+&lt;br&gt;
+- Ga naar de Blackboard Collaborate omgeving van je groep
+&lt;br&gt;
+- Zet je microfoon/video aan
+&lt;br&gt;&lt;br&gt;
+Eén van ons maakt zo meteen een ronde langs de groepen!
+&lt;/p&gt; 
+---
+
+## ExtRa's
+Zit je te popelen om te weten ...
+
+- hoe je toch random slopes voor kwalitatieve variabelen kan plotten zonder foutmelding?
+- hoe je multilevel analyse gebruikt om longitudinale analyses te doen?
+
+&lt;br&gt;
+
+Check Blackboard (Leermateriaal &gt; Materiaal per week)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
