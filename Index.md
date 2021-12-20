@@ -22,4 +22,4 @@ Contactmoment 4 [Slides](C4/C4.html) ([pdf](C4/C4.pdf))
 
 Contactmoment 5 [Slides](C5/C5.html)
 
-Contactmoment 6
+Contactmoment 6 [Slides](C6/C6.html)

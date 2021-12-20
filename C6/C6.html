@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>GKN 2021-2022: C4</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide, center, middle
+
+&lt;style&gt;
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+&lt;/style&gt;
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.right-column{
+  padding-top: 0;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 75%;
+                                  }
+
+
+&lt;/style&gt;
+
+
+&lt;div class="my-logo-left"&gt; &lt;img src="img/UA-eng-hor-1-RGB.jpg" width="90%"/&gt; &lt;/div&gt;
+
+
+# GKN - Contactmoment 6
+.font160[
+.SW-greenD[Logistische regressieanalyses (Deel 2)] 
+]
+Sven De Maeyer &amp; Bea Mertens
+
+.font80[
+.UA-red[
+23/12/2021
+]
+]
+
+---
+class: inverse-green, center, middle
+
+# Recap
+
+---
+## Laatste model vorig contactmoment
+
+.footnotesize[
+
+```
+
+Call:
+glm(formula = Onderpresteren ~ Gender + Ouders_GraagLezenZ, family = binomial(), 
+    data = Vlaanderen_1_2_3)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.1701  -0.6869  -0.5991  -0.4531   2.2943  
+
+Coefficients:
+                   Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)        -1.37641    0.05319  -25.88  &lt; 2e-16 ***
+GenderGirls        -0.25424    0.07611   -3.34 0.000836 ***
+Ouders_GraagLezenZ -0.39405    0.03856  -10.22  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 4496.7  on 4634  degrees of freedom
+Residual deviance: 4377.4  on 4632  degrees of freedom
+  (563 observations deleted due to missingness)
+AIC: 4383.4
+
+Number of Fisher Scoring iterations: 4
+```
+]
+
+---
+## Effect van 'Ouders_GraagLezenZ'
+
+.pull-left[
+&lt;img src="PlotLOG.png" width="593" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+&lt;img src="PlotPROB.png" width="596" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Effect van 'Gender'
+
+
+```r
+library(sjPlot)
+plot_model(M1_PIRLS, transform = NULL, type = "eff", terms = c("Gender"))
+```
+
+&lt;img src="C6_files/figure-html/unnamed-chunk-6-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+## Beide effecten samen?
+
+
+```r
+plot_model(M1_PIRLS, transform = NULL, type = "eff", terms = c("Ouders_GraagLezenZ", "Gender"))
+```
+
+&lt;img src="C6_files/figure-html/unnamed-chunk-7-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse-green, middle, center
+
+# Odds
+
+*Let's talk in Odds*
+
+---
+
+## Parameters als Odds interpreteren (1)
+
+&lt;br&gt;
+
+Het model kunnen we schrijven als: 
+
+`$$Logit(Onderpr. = 1 ) = -1.376 + (-0.254*GenderGirl) + (-0.394*OudersLezenZ)$$`
+
+Nemen we de exponent (.SW-greenD[`exp( )`] ) van het intercept, dan krijgen we Odds (= verhouding van kansen!)
+
+
+```r
+exp(-1.376)
+```
+
+```
+[1] 0.2525869
+```
+
+
+*Voor jongens wiens ouders gemiddeld graag lezen is de kans om te behoren tot de onderpresteerders .SW-greenD[0.25 keer groter (of 1/0.25 = 4 keer kleiner)] dan de kans om niet tot de onderpresteerders te behoren*
+
+---
+
+## Parameters als Odds interpreteren (2)
+
+*.SW-greenD[Hoe de andere parameters interpreteren als we ze exponeren?]*
+
+`$$Logit(Onderpr. = 1 ) = -1.376 + (-0.254*GenderGirl) + (-0.394*OudersLezenZ)$$`
+
+
+
+
+```r
+exp(-0.254)
+```
+
+```
+[1] 0.7756918
+```
+
+```r
+1/exp(-0.254)
+```
+
+```
+[1] 1.289172
+```
+
+*Voor meisjes wiens ouders gemiddeld graag lezen is de .SW-greenD[kansverhouding] om te behoren tot de onderpresteerders eerder dan tot de 'niet onderpresteerders' 0.776 keer groter (of 1/0.776 = 1.289 keer kleiner) dan voor jongens*
+
+&lt;br&gt;
+
+0.776 is een **.UA-red[Odds Ratio]**
+
+---
+
+## Parameters als Odds interpreteren (3)
+
+&lt;img src="LogOdds.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+
+&lt;br&gt;
+
+Voorspelde Odds voor meisjes:
+
+
+```r
+## Voorspelde Odds meisjes:
+exp(-1.376) * exp(-0.254)
+```
+
+```
+[1] 0.1959296
+```
+
+*Voor jongens (wiens ouders gemiddeld graag lezen) is de kans .SW-greenD[0.25 keer groter (of 1/0.25 = 4 keer kleiner)] dan de kans om niet tot de onderpresteerders te behoren.*
+
+*Voor meisjes (wiens ouders gemiddeld graag lezen) is de kans .SW-greenD[0.19 keer groter (of 1/0.19 = 5 keer kleiner)] dan de kans om niet tot de onderpresteerders te behoren.*
+   
+Odds zijn **multiplicatief**
+
+---
+class: inverse-green, center, middle
+
+# Het ene model is het andere niet
+
+Hoe goed zijn modellen?
+
+---
+
+## Geen `\(R^2\)`
+
+Bij gewone regressie-analyse hebben we een geschat residu:
+
+`$$Score_{i}= \beta_0 + \beta_1 * x_1 + \beta_2 * x_2 + ... + \epsilon_{ij}$$`
+
+&lt;br&gt;
+
+Gewone regressieanalyse: *Ordinary Least Squares* (OLS) schattingen     
+
+
+Schattingen die de afstand van de regressielijn met de residuen minimaliseert!
+
+---
+
+## Maximum Likelihood
+
+Bij logistische regressieanalyse hebben we geen geschat residu!
+
+`$$Logit(X=1)= \beta_0 + \beta_1 * x_1 + \beta_2 * x_2 +...$$`
+
+&lt;br&gt;
+
+Logistische regressieanalyse: .UA-red[Maximum Likelihood] (ML) schattingen
+
+---
+
+## Maximum Likelihood
+
+
+Likelihood = functie van parameterwaarden (gegeven de data)!
+
+Doel: die combinatie van parameterwaarden waarvoor de Likelihood zo hoog mogelijk is (=Maximaal)
+
+Hoe? 
+
+- Likelihood wordt eerst log-getransformeerd 
+- Via 'afgeleiden' van Log-likelihood functie parameterwaarden waarvoor de log-likelihood maximaal is
+
+`\(\rightarrow\)` Voor een model krijgen we ook een .UA-red[Log-likelihood (LL)] waarde (= indicatie van FIT!)
+
+---
+
+## Modellen vergelijken
+
+.center2[
+&lt;br&gt;
+2 concurrerende modellen, welk model zou je weerhouden?
+
+&lt;br&gt;
+&lt;br&gt;
+
+`\(\rightarrow\)` Model met hoogste waarde voor LL!
+&lt;br&gt;
+
+]
+
+---
+## Nulmodel als start
+
+Nulmodel = model zonder voorspellers
+
+.footnotesize[
+
+```r
+M0_PIRLS &lt;- glm(Onderpresteren ~ 1, 
+                data = Vlaanderen_1_2_3, family = binomial())
+summary(M0_PIRLS)
+```
+
+```
+
+Call:
+glm(formula = Onderpresteren ~ 1, family = binomial(), data = Vlaanderen_1_2_3)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.6725  -0.6725  -0.6725  -0.6725   1.7875  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -1.37145    0.03452  -39.73   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 5236.4  on 5197  degrees of freedom
+Residual deviance: 5236.4  on 5197  degrees of freedom
+AIC: 5238.4
+
+Number of Fisher Scoring iterations: 4
+```
+]
+
+---
+
+## Vergelijking met Model1
+
+
+```r
+logLik(M0_PIRLS)
+```
+
+```
+'log Lik.' -2618.19 (df=1)
+```
+
+```r
+logLik(M1_PIRLS)
+```
+
+```
+'log Lik.' -2188.681 (df=3)
+```
+
+&lt;br&gt;
+&lt;br&gt;
+
+In onderzoek wordt -2 keer LL gehanteerd (= **-2LL** of **Deviance**)
+
+
+```r
+deviance(M0_PIRLS)
+```
+
+```
+[1] 5236.379
+```
+
+```r
+deviance(M1_PIRLS)
+```
+
+```
+[1] 4377.362
+```
+
+---
+
+## Via .UA-red[`anova()`]
+
+
+```r
+anova(M0_PIRLS , M1_PIRLS)
+```
+
+&lt;br&gt;
+&lt;br&gt;
+
+`\(\rightarrow\)` .UA-red[`Error in anova.glmlist(c(list(object), dotargs), dispersion = dispersion, : models were not all fitted to the same size of dataset`]
+
+---
+
+## Vergelijking modellen (invloed van 'missing values')
+
+Modellen kunnen enkel vergeleken worden als ze geschat zijn op dezelfde dataset (en dus ook op evenveel observatie-eenheden)!
+
+
+```r
+nrow(M0_PIRLS$model)
+```
+
+```
+[1] 5198
+```
+
+```r
+nrow(M1_PIRLS$model)
+```
+
+```
+[1] 4635
+```
+
+`\(\rightarrow\)` Nulmodel herschatten op enkel de 4635 observaties om model te kunnen vergelijken
+
+---
+
+## Vergelijking modellen
+
+Missing values verwijderen:
+
+
+```r
+Dat_analyse &lt;- na.omit( Vlaanderen_1_2_3[ , c("Onderpresteren", "Gender", "Ouders_GraagLezenZ")] )
+```
+
+Modellen herschatten:
+
+
+```r
+M0_PIRLS &lt;- glm(Onderpresteren ~ 1, 
+                data = Dat_analyse, family = binomial())
+
+M1_PIRLS &lt;- glm(Onderpresteren ~ Gender + Ouders_GraagLezenZ, 
+                data = Dat_analyse, family = binomial())
+```
+
+Modellen vergelijken:
+
+
+```r
+anova(M0_PIRLS , M1_PIRLS, test="Chi")
+```
+
+```
+Analysis of Deviance Table
+
+Model 1: Onderpresteren ~ 1
+Model 2: Onderpresteren ~ Gender + Ouders_GraagLezenZ
+  Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+1      4634     4496.7                          
+2      4632     4377.4  2   119.32 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+## Vergelijking modellen
+
+Stappenplan:
+
+- Nadenken over welke modellen je gaat schatten (gegeven je OV)
+
+- Data-object maken zonder missings voor alle variabelen `na.omit()`
+
+- Alternatieve modellen schatten op aangemaakt data-object
+
+- Modellen vergelijken 
+
+- Beste model weerhouden en **herschatten op je originele dataset**
+
+- Interpretatie (Nadenken over tabellen en figuren)
+
+---
+class: inverse-red, middle, center
+
+# Time to pRactice!
+
+&lt;p align = "left"&gt;
+Instructies: 
+&lt;br&gt;
+- Laat deze sessie open staan
+&lt;br&gt;
+- Open Blackboard opnieuw in een ander venster
+&lt;br&gt;
+- Ga naar de curusus GKN
+&lt;br&gt;
+- Ga naar de Blackboard Collaborate omgeving van je groep
+&lt;br&gt;
+- Zet je microfoon/video aan
+&lt;br&gt;&lt;br&gt;
+Eén van ons maakt zo meteen een ronde langs de groepen!
+&lt;/p&gt; 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
