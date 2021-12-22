@@ -166,61 +166,48 @@ exp(-1.376)
 
 ## Parameters als Odds interpreteren (2)
 
-*.SW-greenD[Hoe de andere parameters interpreteren als we ze exponeren?]*
+*.SW-greenD[Hoe de andere parameters interpreteren?]*
 
 `$$Logit(Onderpr. = 1 ) = -1.376 + (-0.254*GenderGirl) + (-0.394*OudersLezenZ)$$`
 
-
+Benadering 1: verwachtte logit voor een meisje berekenen en die omrekenen naar Odds via `exp()`.
 
 
 ```r
-exp(-0.254)
+exp(-1.376 + (-0.254))
 ```
 
 ```
-[1] 0.7756918
+## [1] 0.1959296
 ```
 
-```r
-1/exp(-0.254)
-```
-
-```
-[1] 1.289172
-```
-
-*Voor meisjes wiens ouders gemiddeld graag lezen is de .SW-greenD[kansverhouding] om te behoren tot de onderpresteerders eerder dan tot de 'niet onderpresteerders' 0.776 keer groter (of 1/0.776 = 1.289 keer kleiner) dan voor jongens*
-
-&lt;br&gt;
-
-0.776 is een **.UA-red[Odds Ratio]**
+*Voor meisjes (wiens ouders gemiddeld graag lezen) is de kans .SW-greenD[0.20 keer groter (of 1/0.20 = 5 keer kleiner)] dan de kans om niet tot de onderpresteerders te behoren.*
 
 ---
 
 ## Parameters als Odds interpreteren (3)
 
-&lt;img src="LogOdds.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+`$$Logit(Onderpr. = 1 ) = -1.376 + (-0.254*GenderGirl) + (-0.394*OudersLezenZ)$$`
+
+Benadering 2: parameters zelf exponentiëren.
+
+| Parameter     | Schatting (in logtit) | Exp(Schatting) |   | Odds |
+|---------------|-----------------------|----------------|---|------|
+| Intercept     | -1.38                 | 0.25           |   | 0.25 |
+| GenderGirl    | -0.25                 | 0.77           |   | 0.20 |
 
 
-&lt;br&gt;
 
-Voorspelde Odds voor meisjes:
+`\(0.77 \ne 0.20 \rightarrow 0.77 \ne exp(-1.38 - 0.25)\)`
 
+`\(0.77 = \frac{0.20}{0.25}\)`
 
-```r
-## Voorspelde Odds meisjes:
-exp(-1.376) * exp(-0.254)
-```
+`\(0.77\)` is een **.UA-red[Odds Ratio]**
 
-```
-[1] 0.1959296
-```
+*Voor meisjes wiens ouders gemiddeld graag lezen is de .SW-greenD[kansverhouding] om te behoren tot de onderpresteerders eerder dan tot de 'niet onderpresteerders' 0.77 keer groter (of 1/0.77 = 1.289 keer kleiner) dan dezelfde kansverdeling voor jongens*
 
-*Voor jongens (wiens ouders gemiddeld graag lezen) is de kans .SW-greenD[0.25 keer groter (of 1/0.25 = 4 keer kleiner)] dan de kans om niet tot de onderpresteerders te behoren.*
+Odds ratio's zijn **multiplicatief**
 
-*Voor meisjes (wiens ouders gemiddeld graag lezen) is de kans .SW-greenD[0.19 keer groter (of 1/0.19 = 5 keer kleiner)] dan de kans om niet tot de onderpresteerders te behoren.*
-   
-Odds zijn **multiplicatief**
 
 ---
 class: inverse-green, center, middle
@@ -235,7 +222,7 @@ Hoe goed zijn modellen?
 
 Bij gewone regressie-analyse hebben we een geschat residu:
 
-`$$Score_{i}= \beta_0 + \beta_1 * x_1 + \beta_2 * x_2 + ... + \epsilon_{ij}$$`
+`$$Score_{i}= \beta_0 + \beta_1 * x_1 + \beta_2 * x_2 + ... + \epsilon_{i}$$`
 
 &lt;br&gt;
 
@@ -245,32 +232,89 @@ Gewone regressieanalyse: *Ordinary Least Squares* (OLS) schattingen
 Schattingen die de afstand van de regressielijn met de residuen minimaliseert!
 
 ---
-
 ## Maximum Likelihood
 
-Bij logistische regressieanalyse hebben we geen geschat residu!
+Bij logistische regressie-analyse maken we gebruik van .UA-red[Maximum Likelihood] (ML) schattingen
 
-`$$Logit(X=1)= \beta_0 + \beta_1 * x_1 + \beta_2 * x_2 +...$$`
+Voor elk datapunt kan je berekenen wat de kans is om deze vast te stellen gegeven bepaalde waarden voor elk van de parameters uit het model:
 
+`$$P(\{x1_i,x2_i, ...,y_i \}|\{\beta_0 , \beta_1, ...\})$$`
 &lt;br&gt;
+Deze probabiliteit wordt eigenijk een .UA-red[likelihood] genoemd en vaak andersom genoteerd:
 
-Logistische regressieanalyse: .UA-red[Maximum Likelihood] (ML) schattingen
+
+`$$L(\{\beta_0 , \beta_1, ...\} | \{x1_{i},x2_{i}, ...,y_{i} \})$$`
 
 ---
 
 ## Maximum Likelihood
 
 
-Likelihood = functie van parameterwaarden (gegeven de data)!
 
-Doel: die combinatie van parameterwaarden waarvoor de Likelihood zo hoog mogelijk is (=Maximaal)
+```r
+head(Vlaanderen_1_2_3[,c("Onderpresteren","Gender","Ouders_GraagLezenZ")],2)
+```
+
+```
+##   Onderpresteren Gender Ouders_GraagLezenZ
+## 1              0   Boys          -1.136437
+## 2              0   Boys           1.507655
+```
+
+Likelihood voor datapunt 1 bij .red[intercept -1.376], effect van .green[GenderGirl -0.254] en .blue[Ouders_GraagLezenZ -0.394], schrijven we als:
+
+`$$L(\{\color{red}{-1.376} , \color{green}{-0.254}, \color{blue}{-0.394} \} | \{0,Boys,-1.136\} )$$`
+
+Kan ook voor datapunt 2:
+
+
+`$$L(\{\color{red}{-1.376} , \color{green}{-0.254}, \color{blue}{-0.394} \} | \{0,Boys,1.508\} )$$`
+
+
+De waarschijnlijkheid van beide observaties samen, gegeven bepaalde parameterwaarden, is het product van de twee individuele likelihoods:
+
+`$$L(\{\color{red}{-1.376} , \color{green}{-0.254}, \color{blue}{-0.394} \} | \{0,Boys,-1.136\} ) \times L(\{\color{red}{-1.376} , \color{green}{-0.254}, \color{blue}{-0.394} \} | \{0,Boys,1.508\})$$`
+---
+
+## Maximum Likelihood
+
+Likelihood alle observaties = product van likelihood voor individueel datapunt
+
+&lt;br&gt;
+Dit kunnen we in theorie ook doen voor alle mogelijke combinaties van parameterwaarden 
+
+&lt;br&gt;
+
+Bv ook voor de waardes:
+
+- intercept = `\(-\infty \rightarrow 0, 0.1, 0.2, \rightarrow \infty\)`
+- `\(\beta_1\)` = `\(-\infty \rightarrow 0, 0.1, 0.2, \rightarrow \infty\)`
+- `\(\beta_2\)` = `\(-\infty \rightarrow 0, 0.1, 0.2, \rightarrow \infty\)`
+
+&lt;br&gt;
+
+---
+
+## Maximum Likelihood
+
+Doel: die combinatie van parameterwaarden waarvoor de Likelihood van de data zo hoog mogelijk is (Maximaal is dus)
 
 Hoe? 
 
-- Likelihood wordt eerst log-getransformeerd 
+.pull-left[
+- Likelihood wordt eerst log-getransformeerd
+
 - Via 'afgeleiden' van Log-likelihood functie parameterwaarden waarvoor de log-likelihood maximaal is
 
+&lt;br&gt;
 `\(\rightarrow\)` Voor een model krijgen we ook een .UA-red[Log-likelihood (LL)] waarde (= indicatie van FIT!)
+]
+
+.pull-right[
+&lt;img src="C6_files/figure-html/unnamed-chunk-11-1.png" width="360" style="display: block; margin: auto;" /&gt;
+
+]
+
 
 ---
 

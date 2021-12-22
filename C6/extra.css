@@ -38,7 +38,7 @@ content: "";
   color: #ffffff;             /* white text */
 }
 
-.title-slide-blue {
+.title-slide-green {
   background-color: #ada500;  /* green background */
   color: #ffffff;             /* white text */
 }
@@ -86,8 +86,8 @@ content: "";
 .Large       , .Large .remark-code, .Large .remark-inline-code { font-size: 144%; }
 .large       , .large .remark-code, .large .remark-inline-code { font-size: 120%; }
 .small       , .small .remark-code, .small .remark-inline-code { font-size: 90%; }
-.footnotesize, .footnotesize .remark-code, .footnotesize .remark-inline-code { font-size: 80%; }
-.scriptsize  , .scriptsize .remark-code, .scriptsize .remark-inline-code { font-size: 70%; }
+.footnotesize, .footnotesize .remark-code, .footnotesize .remark-inline-code { font-size: 75%; }
+.scriptsize  , .scriptsize .remark-code, .scriptsize .remark-inline-code { font-size: 100%; }
 .tiny        , .tiny .remark-code, .tiny .remark-inline-code { font-size: 60%; }
 
 /* or you can be more specific */
